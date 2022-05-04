@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pie.dpc</groupId>
+    <artifactId>pie-dpc</artifactId>
+    <version>1.0-dev</version>
+    <modules>
+        <module>pie-dpc-client</module>
+        <module>pie-dpc-server</module>
+        <module>pie-common</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <jnotify.version>0.94</jnotify.version>
+        <jnotify-lib.version>0.94_64bit</jnotify-lib.version>
+    </properties>
+
+    <developers>
+        <developer>
+            <name>lucifer</name>
+            <email>wangxiyue.xy@163.com</email>
+        </developer>
+    </developers>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.contentobjects.jnotify</groupId>
+                <artifactId>jnotify</artifactId>
+                <version>${jnotify.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.contentobjects</groupId>
+                <artifactId>libjnotify</artifactId>
+                <version>${jnotify-lib.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+</project>

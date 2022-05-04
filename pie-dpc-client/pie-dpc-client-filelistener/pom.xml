@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>pie-dpc-client</artifactId>
+        <groupId>com.pie.dpc</groupId>
+        <version>1.0-dev</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>pie-dpc-client-filelistener</artifactId>
+    <description>文件监听，支持各种监听方式</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.contentobjects.jnotify</groupId>
+            <artifactId>jnotify</artifactId>
+        </dependency>
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/net.contentobjects/libjnotify &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>net.contentobjects</groupId>-->
+<!--            <artifactId>libjnotify</artifactId>-->
+<!--        </dependency>-->
+
+    </dependencies>
+
+    <!-- 在central库中没有这个包，需要添加以下的repo -->
+    <repositories>
+        <repository>
+            <id>bintray</id>
+            <url>http://dl.bintray.com/typesafe/maven-releases/</url>
+        </repository>
+    </repositories>
+
+</project>
