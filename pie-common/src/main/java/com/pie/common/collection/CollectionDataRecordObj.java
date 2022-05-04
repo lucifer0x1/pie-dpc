@@ -1,5 +1,7 @@
 package com.pie.common.collection;
 
+import java.io.File;
+
 /**
  * @Author wangxiyue.xy@163.com
  * @Date 2022/5/5 00:39
@@ -23,7 +25,8 @@ public class CollectionDataRecordObj {
 
     public CollectionDataRecordObj(String dataCode, String dataDirectory, String regexStr) {
         this.dataCode = dataCode;
-        this.dataDirectory = dataDirectory;
+        //统一目录格式
+        this.dataDirectory = new File(dataDirectory).getAbsolutePath();
         this.regexStr = regexStr;
     }
 
@@ -50,7 +53,8 @@ public class CollectionDataRecordObj {
     }
 
     public void setDataDirectory(String dataDirectory) {
-        this.dataDirectory = dataDirectory;
+        //统一目录格式
+        this.dataDirectory = new File(dataDirectory).getAbsolutePath();
     }
 
     public String getRegexStr() {

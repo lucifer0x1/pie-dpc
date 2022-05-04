@@ -9,7 +9,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScans;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +30,11 @@ public class PieClientAgent implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
+        /** TODO  启动心跳
+            heartBeatMonitor.autoStart();
+         **/
+
         if(args.containsOption("path")){
             Set<String> paths = new HashSet<>();
             for (String optionValue : args.getOptionValues("path")) {

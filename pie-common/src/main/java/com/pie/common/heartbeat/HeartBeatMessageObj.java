@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
- *
+ * 心跳信息
  */
 public class HeartBeatMessageObj {
 
