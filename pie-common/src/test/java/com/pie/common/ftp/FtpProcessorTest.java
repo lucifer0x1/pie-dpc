@@ -14,10 +14,9 @@ class FtpProcessorTest {
 
 
     @Test
-    public String test() throws Exception {
-        boolean  b1= ftpProcessor.uploadFile("/Inventory", "zw2.txt", "C:/Users/Minco/Desktop/图片/中文.txt");
-        boolean  b2= ftpProcessor.uploadFile("/Sellout", "zw3.txt", "C:/Users/Minco/Desktop/图片/中文.txt");
-        return "上传结果B1："+b1+",B2:"+b2;
+    public void test() throws Exception {
+        boolean  b1= ftpProcessor.uploadFile("/Inventory", "zw2.txt", "C:/test/data/test.txt");
+        System.out.println( "上传结果B1："+b1);
     }
 
 }
