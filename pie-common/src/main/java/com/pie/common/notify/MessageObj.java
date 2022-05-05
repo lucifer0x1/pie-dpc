@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * MQ obj
+ * 发现文件后 ，上传服务端消息
  */
 public class MessageObj {
 

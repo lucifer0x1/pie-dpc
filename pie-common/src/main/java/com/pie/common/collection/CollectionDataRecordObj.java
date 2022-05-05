@@ -1,5 +1,8 @@
 package com.pie.common.collection;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
 import java.io.File;
 
 /**
@@ -9,7 +12,6 @@ import java.io.File;
  *
  * 数据目录、采集策略配置记录（一个目录对应一条正则表达式）
  *
- *
  **/
 public class CollectionDataRecordObj {
 
@@ -17,26 +19,19 @@ public class CollectionDataRecordObj {
     private String dataDirectory;
     private String regexStr;
 
-
-
-
     public CollectionDataRecordObj() {
     }
 
     public CollectionDataRecordObj(String dataCode, String dataDirectory, String regexStr) {
         this.dataCode = dataCode;
         //统一目录格式
-        this.dataDirectory = new File(dataDirectory).getAbsolutePath();
+        this.dataDirectory =  new File(dataDirectory).toPath().toString();
         this.regexStr = regexStr;
     }
 
     @Override
     public String toString() {
-        return "{" +
-                "dataCode='" + dataCode + '\'' +
-                ", dataDirectory='" + dataDirectory + '\'' +
-                ", regexStr='" + regexStr + '\'' +
-                '}';
+        return JSON.toJSONString(this, SerializerFeature.WriteMapNullValue);
     }
 
     // SET GET
@@ -54,7 +49,7 @@ public class CollectionDataRecordObj {
 
     public void setDataDirectory(String dataDirectory) {
         //统一目录格式
-        this.dataDirectory = new File(dataDirectory).getAbsolutePath();
+        this.dataDirectory = new File(dataDirectory).toPath().toString();
     }
 
     public String getRegexStr() {
