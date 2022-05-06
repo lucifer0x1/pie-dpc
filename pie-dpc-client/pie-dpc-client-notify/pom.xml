@@ -3,21 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>pie-dpc</artifactId>
+        <artifactId>pie-dpc-client</artifactId>
         <groupId>com.pie.dpc</groupId>
         <version>1.0-dev</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pie-dpc-client</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>pie-dpc-client-filelistener</module>
-        <module>pie-dpc-client-main</module>
-        <module>pie-dpc-client-transfer</module>
-        <module>pie-dpc-client-notify</module>
-    </modules>
+    <artifactId>pie-dpc-client-notify</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
