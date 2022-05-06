@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfigure {
 
-    private final String DEFAULT_EXCHANGE_NAME = "DEFAULT_EXCHANGE_PIE_DPC";
-    private final String DEFAULT_QUEUE_FILE_ARRIVAL = "FILE_ARRIVAL_QUEUE";
-    private final String DEFAULT_ROUTE_FILE_ARRIVAL = "FILE_ARRIVAL_ROUTE";
+    public static final String DEFAULT_EXCHANGE_NAME = "DEFAULT_EXCHANGE_PIE_DPC";
+    public static final String DEFAULT_QUEUE_FILE_ARRIVAL = "FILE_ARRIVAL_QUEUE";
+    public static final String DEFAULT_ROUTE_FILE_ARRIVAL = "FILE_ARRIVAL_ROUTE";
 
 
     /**

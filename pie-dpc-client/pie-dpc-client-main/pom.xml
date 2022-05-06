@@ -28,6 +28,12 @@
             <version>1.0-dev</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.pie.dpc</groupId>
+            <artifactId>pie-dpc-client-notify</artifactId>
+            <version>1.0-dev</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
