@@ -31,9 +31,8 @@ public class PieClientAgent implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        /** TODO  启动心跳
-            heartBeatMonitor.autoStart();
-         **/
+        /** TODO  启动心跳 **/
+        heartBeatMonitor.autoStart();
 
         if(args.containsOption("path")){
             Set<String> paths = new HashSet<>();
@@ -41,16 +40,13 @@ public class PieClientAgent implements ApplicationRunner {
                 paths.add(optionValue);
                 System.out.println(optionValue);
             }
-
             monitorService.monitor(paths.toArray(new String[paths.size()]));
         }else {
             System.out.println(usage());
-//            monitorService.monitor("c:\\test\\");
+            //此处可以启动默认监听 monitorService.monitor("c:/test");
         }
 
-//        FileDirectoryMonitorService listener = new FileDirectoryMonitorService();
-//        listener.monitor("c:\\test\\a","c:\\test\\b");
-//        monitor.autoStart();
+
     }
 
     private String usage(){

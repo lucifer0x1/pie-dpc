@@ -1,4 +1,4 @@
-package com.pie.dpc.notify;
+package com.pie.dpc.notify.rabbitmq;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
