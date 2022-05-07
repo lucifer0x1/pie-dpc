@@ -32,7 +32,7 @@ public abstract class HeartBeatMonitor {
         scheduledExecutorService = Executors.newScheduledThreadPool(1,new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
-                Thread thread = new Thread(r,"heatbeat sender monitor ThreadPool");
+                Thread thread = new Thread(r,"heatbeat sender monitor threadPool");
                 thread.setDaemon(true);
                 return thread;
             }

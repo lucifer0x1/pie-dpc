@@ -31,7 +31,7 @@ public class PieClientAgent implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        /** TODO  启动心跳 **/
+        /** TODO  启动心跳 ， 如果引入starter web 则交给Bean实现 **/
         heartBeatMonitor.autoStart();
 
         if(args.containsOption("path")){
@@ -45,7 +45,6 @@ public class PieClientAgent implements ApplicationRunner {
             System.out.println(usage());
             //此处可以启动默认监听 monitorService.monitor("c:/test");
         }
-
 
     }
 
