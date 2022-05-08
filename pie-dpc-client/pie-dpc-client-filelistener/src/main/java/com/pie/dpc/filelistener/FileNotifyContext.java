@@ -21,6 +21,24 @@ public class FileNotifyContext {
         this.notify = notifyStrategy;
     }
 
+    public void autoListener(final String... filePaths){
+        Set<String> pathList =  notify.checkPath(filePaths);
+        for (String filePath : pathList) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    notify.fileWatch(filePath);
+                    try {
+                        Thread.sleep(Integer.MAX_VALUE);
+                    } catch (InterruptedException e) {
+                        log.error("Thread sleep ==> {}",e.getMessage());
+                    }
+                }
+            }).start();
+        }
+        log.info("[{}] ==> Thread Starting ....",this.notify.findStrategyName());
+    }
+
     public void autoListener(final CollectionDataRecordObj... dataRecordObjs){
 
         for (CollectionDataRecordObj dataRecordObj : dataRecordObjs) {

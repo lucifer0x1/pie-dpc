@@ -22,6 +22,16 @@ public class FileDirectoryMonitorService {
         this.afterFileNotify = afterFileNotify;
     }
 
+    public void  monitor(String ...path){
+        FileNotifyStrategy strategy = null;
+        if(isWin32orLinux()){
+            strategy = new SimpleFileNotifStrategyService();
+        }else {
+            strategy = new LinuxFileNotifyStrategyService(afterFileNotify);
+        }
+        FileNotifyContext context = new FileNotifyContext(strategy);
+        context.autoListener(path);
+    }
 
     public void monitor(CollectionDataRecordObj... path){
         FileNotifyStrategy strategy = null;
