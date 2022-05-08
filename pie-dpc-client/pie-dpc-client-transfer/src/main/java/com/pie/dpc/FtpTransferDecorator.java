@@ -1,6 +1,5 @@
 package com.pie.dpc;
 
-import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.File;
 
@@ -13,11 +12,6 @@ public class FtpTransferDecorator implements FileTransferFunction {
 
 
 
-    public FTPClient getFtpClient(){
-        FTPClient ftpClient  = new FTPClient();
-
-        return ftpClient;
-    }
 
 
     @Override
