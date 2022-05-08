@@ -1,5 +1,6 @@
 package com.pie.dpc.filelistener;
 
+import com.pie.common.collection.CollectionDataRecordObj;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,11 @@ import java.util.Set;
 public interface FileNotifyStrategy {
 
     Logger log = LoggerFactory.getLogger(FileNotifyStrategy.class);
+
+    default Set<CollectionDataRecordObj> checkPath(CollectionDataRecordObj dataRecordObj){
+        log.warn("if you use this function ,you need to @Override [checkPath(CollectionDataRecordObj dataRecordObj)]");
+        return null;
+    };
 
     /**
      * 判断是否可被监听
@@ -39,6 +45,10 @@ public interface FileNotifyStrategy {
             log.error("There is no Directory to Listener !!!");
         }
         return checkOk;
+    };
+
+    default void fileWatch(CollectionDataRecordObj dataRecord) {
+        log.warn("if you use this function ,you need to @Override [fileWatch(CollectionDataRecordObj dataRecord)]");
     };
 
     /**

@@ -1,5 +1,6 @@
 package com.pie.dpc.filelistener;
 
+import com.pie.common.collection.CollectionDataRecordObj;
 import com.pie.dpc.filelistener.strategy.LinuxFileNotifyStrategyService;
 import com.pie.dpc.filelistener.strategy.SimpleFileNotifStrategyService;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class FileDirectoryMonitorService {
     }
 
 
-    public void monitor(String... path){
+    public void monitor(CollectionDataRecordObj... path){
         FileNotifyStrategy strategy = null;
         if(isWin32orLinux()){
             strategy = new SimpleFileNotifStrategyService();

@@ -1,5 +1,6 @@
 package com.pie.dpc.filelistener;
 
+import com.pie.common.collection.CollectionDataRecordObj;
 import net.contentobjects.jnotify.JNotifyException;
 import net.contentobjects.jnotify.win32.JNotify_win32;
 import org.slf4j.Logger;
@@ -20,7 +21,12 @@ public class FileNotifyContext {
         this.notify = notifyStrategy;
     }
 
-    public void autoListener(final String... filePaths){
+    public void autoListener(final CollectionDataRecordObj... dataRecordObjs){
+
+        for (CollectionDataRecordObj dataRecordObj : dataRecordObjs) {
+           dataRecordObj.getDataDirectory();
+        }
+        String filePaths = "";
         Set<String> pathList =  notify.checkPath(filePaths);
         for (String filePath : pathList) {
             new Thread(new Runnable() {

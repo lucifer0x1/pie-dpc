@@ -29,8 +29,14 @@
             <groupId>net.contentobjects.jnotify</groupId>
             <artifactId>jnotify</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.pie.dpc</groupId>
+            <artifactId>pie-common</artifactId>
+            <version>1.0-dev</version>
+            <scope>compile</scope>
+        </dependency>
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/net.contentobjects/libjnotify &ndash;&gt;-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/net.contentobjects/libjnotify &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>net.contentobjects</groupId>-->
 <!--            <artifactId>libjnotify</artifactId>-->
