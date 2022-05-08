@@ -12,6 +12,10 @@ rabbitmq-plugins enable rabbitmq_management
 ###kafka
 
 ###redis
+~~~
+docker run -d --hostname redis-server --name redis-server -p 6379:6479 redis
+~~~
+ 
 
 #开发
 
