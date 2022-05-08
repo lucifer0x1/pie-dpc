@@ -1,5 +1,8 @@
 package com.pie.dpc.controller;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.concurrent.RecursiveTask;
 
 /**
@@ -7,15 +10,16 @@ import java.util.concurrent.RecursiveTask;
  * @Date 2022/5/7 10:41
  * @Description TODO : 所有页面放回结果包装类
  **/
-
+@ApiModel("接口返回包装类")
 public class ResultOK<T> {
 
-    //接口调度成功或失败状态
+    @ApiModelProperty("接口调度成功或失败状态")
     private boolean returnSuccess = false;
 
-    //自定义返回码
+    @ApiModelProperty("自定义返回码")
     private int returnCode = 0;
 
+    @ApiModelProperty("接口返回数据对象")
     private T data = null;
 
     private ResultOK(boolean status) {

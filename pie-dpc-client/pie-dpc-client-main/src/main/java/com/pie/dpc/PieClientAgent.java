@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,8 +43,13 @@ public class PieClientAgent implements ApplicationRunner {
             }
             monitorService.monitor(paths.toArray(new String[paths.size()]));
         }else {
-            System.out.println(usage());
-            //此处可以启动默认监听 monitorService.monitor("c:/test");
+            File tmpDir = new File("c:/test");
+            if(tmpDir.exists() &&tmpDir.isDirectory() && tmpDir.canRead()){
+                /** 此处可以启动默认监听 **/
+                monitorService.monitor(tmpDir.getAbsolutePath());
+            }else {
+                System.out.println(usage());
+            }
         }
 
     }

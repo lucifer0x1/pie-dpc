@@ -1,5 +1,6 @@
 package com.pie.dpc.filelistener.strategy;
 
+import com.pie.dpc.filelistener.AfterFileNotify;
 import com.pie.dpc.filelistener.FileNotifyStrategy;
 import net.contentobjects.jnotify.JNotifyException;
 import net.contentobjects.jnotify.linux.INotifyListener;
@@ -19,27 +20,37 @@ import java.util.Set;
  **/
 public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
 
-
+    private AfterFileNotify after;
     private int maskDir = JNotify_linux.IN_ISDIR | JNotify_linux.IN_CREATE | JNotify_linux.IN_DELETE | JNotify_linux.IN_IGNORED  ;
+    private int maskFile = JNotify_linux.IN_CLOSE_WRITE | JNotify_linux.IN_MOVE ;
 
     private HashMap<Integer,String> wdTree = new HashMap<>();
+
+    public LinuxFileNotifyStrategyService (AfterFileNotify afterEvent){
+        this.after = afterEvent;
+    }
 
 
     @Override
     public void fileWatch(String filePath) {
 
 
-        int mask = JNotify_linux.IN_CLOSE_WRITE | JNotify_linux.IN_MOVE ;
         try {
 
             wdTree.put( JNotify_linux.addWatch(filePath,maskDir),filePath);
+            //TODO 目录下文件变化监听
+            JNotify_linux.addWatch(filePath,maskFile);
 
             Set<File> dir = getDirectory(new File(filePath));
             log.debug("all dir size => {}",dir.size());
             for (File file : dir) {
                 wdTree.put(JNotify_linux.addWatch(file.getAbsolutePath(),maskDir),file.getAbsolutePath());
+                //TODO 目录下文件变化监听
+                JNotify_linux.addWatch(filePath,maskFile);
             }
             log.debug("wdTree szie == {}",wdTree.size());
+
+
 
             //first listener
             JNotify_linux.setNotifyListener(new LinuxNotifyListener());
@@ -48,6 +59,14 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
             log.error("JNotify error ==> {}",e.getMessage());
         } catch (InterruptedException e) {
             log.error("Thread Sleep Interrupted ==> {}",e.getMessage());
+        }
+    }
+
+    @Override
+    public void afterWatch(File targetFile) {
+        // TODO 发送消息
+        if (after != null) {
+            after.afterFileNotifyFunction(targetFile);
         }
     }
 
@@ -91,6 +110,9 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
                         // TODO create condition
                         int subWd = JNotify_linux.addWatch(fullName,maskDir);
                         wdTree.put(subWd,fullName);
+                        //TODO 目录下文件变化监听
+                        JNotify_linux.addWatch(fullName,maskFile);
+
                         log.debug("add path[{}]",fullName);
                     }else if (wdTree.containsValue(name)) {
                         // TODO delete condition
@@ -101,15 +123,11 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
                 } catch (JNotifyException e) {
                     log.error("[{}] 目录发生变化",e.getMessage());
                 }
-            }else {
+            }else  { // TODO if ((mask & maskFile) == mask)
                 //文件变化
                 log.debug("file change[{}] wd = {} ,mask = {} , cookie =  {} ",
                         fullName,wd,mask,cookie);
             }
-
-
-
-
         }
     }
 }

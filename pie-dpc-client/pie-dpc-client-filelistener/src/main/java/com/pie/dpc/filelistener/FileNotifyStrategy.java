@@ -47,6 +47,15 @@ public interface FileNotifyStrategy {
      */
     void fileWatch(String filePath);
 
+    /**
+     * 文件变化发生后，处理该文件
+     * @param targetFile
+     */
+    default void afterWatch(File targetFile) {
+        log.debug("新文件落地[{}] size = {},lastTime = {}",
+                targetFile.getAbsoluteFile(),targetFile.length());
+    };
+
 
     /**
      * 监听文件变化，工作模式。

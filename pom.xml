@@ -29,7 +29,7 @@
         <jnotify.version>0.94</jnotify.version>
         <jnotify-lib.version>0.94_64bit</jnotify-lib.version>
         <fastjson.version>1.2.75</fastjson.version>
-
+        <swagger.version>2.9.2</swagger.version>
     </properties>
 
     <developers>
@@ -99,9 +99,17 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
-
-
-
+            <!-- swagger2 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
