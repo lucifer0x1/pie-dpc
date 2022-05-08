@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 发现文件后 ，上传服务端消息
+ * 发现文件后 ，上传服务端,同时发送该结构(MessageObj)消息
  */
 public class MessageObj {
 
@@ -25,9 +25,9 @@ public class MessageObj {
     private String targetPath;
 
     /**
-     * 消息返送时间
+     * 消息发送时间
      */
-    private Date sendMsgTime;
+    private Date sendMsgTime = new Date();
 
     /**
      * 业务_观测数据时间
@@ -45,6 +45,25 @@ public class MessageObj {
      * 消息体 业务内容
      */
     private String content;
+
+    public MessageObj(){
+        this.sendMsgTime =  new Date();
+    }
+
+
+    public MessageObj(MessageType type,
+                      String filename,
+                      String targetPath,
+                      Date dataTime, Date dataForecastTime,
+                      String content) {
+        this.sendMsgTime = new Date();
+        this.type = type;
+        this.filename = filename;
+        this.targetPath = targetPath;
+        this.dataTime = dataTime;
+        this.dataForecastTime = dataForecastTime;
+        this.content = content;
+    }
 
     @Override
     public String toString() {

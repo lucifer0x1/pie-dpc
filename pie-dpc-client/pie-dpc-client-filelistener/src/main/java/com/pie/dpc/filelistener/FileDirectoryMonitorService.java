@@ -5,14 +5,22 @@ import com.pie.dpc.filelistener.strategy.SimpleFileNotifStrategyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 @Component
+@DependsOn("afterFileNotify")
 public class FileDirectoryMonitorService {
     Logger log = LoggerFactory.getLogger(FileDirectoryMonitorService.class);
 
-    @Autowired(required = false)
-    AfterFileNotify afterFileNotify;
+
+
+    private final AfterFileNotify afterFileNotify;
+
+    public FileDirectoryMonitorService(AfterFileNotify afterFileNotify) {
+        this.afterFileNotify = afterFileNotify;
+    }
+
 
     public void monitor(String... path){
         FileNotifyStrategy strategy = null;
