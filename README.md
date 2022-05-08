@@ -9,11 +9,14 @@ docker run -d --hostname rabbitmq-server --name rabbitmq-server   -e RABBITMQ_DE
 ~~~
 rabbitmq-plugins enable rabbitmq_management
 ~~~
+~~~
+echo management_agent.disable_metrics_collector = false > management_agent.disable_metrics_collector.conf
+~~~
 ###kafka
 
 ###redis
 ~~~
-docker run -d --hostname redis-server --name redis-server -p 6379:6479 redis
+docker run -d --hostname redis-server --name redis-server -p 6379:6379 redis
 ~~~
  
 
