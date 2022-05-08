@@ -30,18 +30,7 @@ public class CollectionMessageObj {
     private String recvIpAddress;
     private String recvPort;
 
-    /**
-     * 可选参数：用于判断采集的数据是否完整。
-     * 文件大小范围，最【大】值，单位 byte
-     * 小于 0 无效
-     */
-    private Long fileSizeMax=-1l;
-    /**
-     * 可选参数：用于判断采集的数据是否完整。
-     * 文件大小范围，最【小】值，单位 byte
-     * 小于 0 无效
-     */
-    private Long fileSizeMin=-1l;
+
     /**
      * 采集目录配置策略
      *
@@ -114,21 +103,7 @@ public class CollectionMessageObj {
         this.recvPort = recvPort;
     }
 
-    public Long getFileSizeMax() {
-        return fileSizeMax;
-    }
 
-    public void setFileSizeMax(Long fileSizeMax) {
-        this.fileSizeMax = fileSizeMax;
-    }
-
-    public Long getFileSizeMin() {
-        return fileSizeMin;
-    }
-
-    public void setFileSizeMin(Long fileSizeMin) {
-        this.fileSizeMin = fileSizeMin;
-    }
 
 
 
