@@ -34,7 +34,7 @@ class CacheCollectionConfigTest {
     void loadFromDisk() {
         System.out.println(cacheConfig.getRecordSize());
         cacheConfig.loadFromDisk();
-        System.out.println(cacheConfig.getRecordSize());
-
+        System.out.println(cacheConfig.getRecordByDataCode("datacode1").toString());
+        System.out.println(cacheConfig.getRecordByDataCode("datacode2").toString());
     }
 }
