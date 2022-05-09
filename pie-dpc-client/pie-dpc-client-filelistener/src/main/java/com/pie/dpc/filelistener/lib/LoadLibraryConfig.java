@@ -21,14 +21,14 @@ import java.nio.file.Files;
 @Component
 public class LoadLibraryConfig {
 
-    Logger logger = LoggerFactory.getLogger(LoadLibraryConfig.class);
+    static Logger logger = LoggerFactory.getLogger(LoadLibraryConfig.class);
 
     private static final String LIB_JNOTIFY_TARGET_PATH = "lib/libjnotify.so";
 
 
 
 
-    private String extractLibrary() {
+    private static String extractLibrary() {
         try {
             // Create temporary file
             File file = File.createTempFile("libnotify", ".lib");
@@ -37,7 +37,7 @@ public class LoadLibraryConfig {
                 // First of all, let's show where do we plan to extract it
                 logger.debug("Temporary file: {}" , file.getAbsoluteFile().toPath());
                 // Now, we can get the lib file from JAR and put it inside temporary location
-                InputStream link = (getClass().getClassLoader().getResourceAsStream(LIB_JNOTIFY_TARGET_PATH));
+                InputStream link = (LoadLibraryConfig.class.getClassLoader().getResourceAsStream(LIB_JNOTIFY_TARGET_PATH));
                 // We want to overwrite existing file. This is why we are using
                 // java.nio.file.StandardCopyOption.REPLACE_EXISTING
                 Files.copy(
@@ -56,7 +56,7 @@ public class LoadLibraryConfig {
     }
 
     @PostConstruct
-    public void initLoad(){
+    public static void initLoad(){
         String filePath = extractLibrary();
         if(filePath!=null){
             System.load(filePath);
