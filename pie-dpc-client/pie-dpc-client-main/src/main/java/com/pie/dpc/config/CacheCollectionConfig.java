@@ -76,10 +76,11 @@ public class CacheCollectionConfig {
                     String propName = field.getName();
                     try {
                         Method method = obj.getClass()
-                                .getDeclaredMethod("set"+propName.substring(0,1).toUpperCase() +propName.substring(1),null);
+                                .getDeclaredMethod("set"+propName.substring(0,1).toUpperCase() +propName.substring(1),String.class);
                         method.invoke(obj,properties.get(dataCode+"."+ propName ));
                     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                         log.warn("dataRecord CLASS warning => [{}]",e.getMessage());
+                        e.printStackTrace();
                     }
                 }
                 addRecord(obj);

@@ -81,15 +81,15 @@ public class CollectionDataRecordObj {
         return fileSizeMax;
     }
 
-    public void setFileSizeMax(Long fileSizeMax) {
-        this.fileSizeMax = fileSizeMax;
+    public void setFileSizeMax(String fileSizeMax) {
+        this.fileSizeMax = Long.valueOf(fileSizeMax);
     }
 
     public Long getFileSizeMin() {
         return fileSizeMin;
     }
 
-    public void setFileSizeMin(Long fileSizeMin) {
-        this.fileSizeMin = fileSizeMin;
+    public void setFileSizeMin(String fileSizeMin) {
+        this.fileSizeMin = Long.valueOf(fileSizeMin);
     }
 }
