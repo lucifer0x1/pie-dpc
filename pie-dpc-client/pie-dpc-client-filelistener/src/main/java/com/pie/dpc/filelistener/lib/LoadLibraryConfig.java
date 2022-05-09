@@ -23,7 +23,7 @@ public class LoadLibraryConfig {
 
     Logger logger = LoggerFactory.getLogger(LoadLibraryConfig.class);
 
-    private static final String LIB_JNOTIFY_TARGET_PATH = "lib/libnotify.so";
+    private static final String LIB_JNOTIFY_TARGET_PATH = "lib/libjnotify.so";
 
 
 
@@ -37,7 +37,7 @@ public class LoadLibraryConfig {
                 // First of all, let's show where do we plan to extract it
                 logger.debug("Temporary file: {}" , file.getAbsoluteFile().toPath());
                 // Now, we can get the lib file from JAR and put it inside temporary location
-                InputStream link = (getClass().getResourceAsStream(LIB_JNOTIFY_TARGET_PATH));
+                InputStream link = (getClass().getClassLoader().getResourceAsStream(LIB_JNOTIFY_TARGET_PATH));
                 // We want to overwrite existing file. This is why we are using
                 // java.nio.file.StandardCopyOption.REPLACE_EXISTING
                 Files.copy(
