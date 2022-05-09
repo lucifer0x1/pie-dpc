@@ -19,6 +19,7 @@ public class FileDirectoryMonitorService {
 
 
     public FileDirectoryMonitorService(AfterFileNotify afterFileNotify) {
+
         this.afterFileNotify = afterFileNotify;
     }
 
@@ -34,7 +35,10 @@ public class FileDirectoryMonitorService {
     }
 
     public void stop(){
-        context.stop();
+        if (context != null) {
+            context.stop();
+        }
+        log.debug("monitor is stop");
     }
 
     public void reMonitor(){
@@ -59,8 +63,10 @@ public class FileDirectoryMonitorService {
         if (osName.startsWith("windows")) {
             return true;
         }
-        //TODO 加载 so
-
+        /**
+         * TODO 加载so
+         * 非Win32方式，MAC 和 Linux
+         */
 
 
         return false;

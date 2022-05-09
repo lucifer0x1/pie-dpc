@@ -26,6 +26,7 @@ public class FileNotifyContext {
         if(STATUS){
             this.notify.cancel();
         }
+        log.debug("{} --> notifyStrategy is stop",this.notify.findStrategyName() );
     }
 
     private CollectionDataRecordObj[] collectionDataRecordObjs;
