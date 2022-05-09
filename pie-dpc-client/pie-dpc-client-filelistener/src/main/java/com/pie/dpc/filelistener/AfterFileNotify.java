@@ -1,5 +1,9 @@
 package com.pie.dpc.filelistener;
 
+import com.pie.common.collection.CollectionDataRecordObj;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 /**
@@ -9,5 +13,11 @@ import java.io.File;
  **/
 public interface AfterFileNotify {
 
+    Logger log = LoggerFactory.getLogger(AfterFileNotify.class);
+
     void afterFileNotifyFunction(File file);
+
+    default  void afterFileNotifyFunction(CollectionDataRecordObj recordObj,File file){
+        log.warn("if you ues this, you need to @Override afterFileNotifyFunction(CollectionDataRecordObj recordObj)");
+    };
 }

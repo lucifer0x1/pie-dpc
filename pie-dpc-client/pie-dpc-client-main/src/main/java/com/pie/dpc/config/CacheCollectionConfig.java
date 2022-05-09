@@ -64,6 +64,7 @@ public class CacheCollectionConfig {
             properties.load(fis);
 
             Set<String> dataCodes = new HashSet<>();
+            System.out.println(properties.size());
             properties.forEach((k,v) ->{
                 String[] keys = String.valueOf(k).split("\\.");
                 dataCodes.add(keys[0]);

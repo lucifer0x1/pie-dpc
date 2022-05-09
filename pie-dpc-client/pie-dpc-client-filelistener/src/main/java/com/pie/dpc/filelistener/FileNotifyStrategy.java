@@ -19,9 +19,28 @@ public interface FileNotifyStrategy {
 
     Logger log = LoggerFactory.getLogger(FileNotifyStrategy.class);
 
-    default Set<CollectionDataRecordObj> checkPath(CollectionDataRecordObj dataRecordObj){
-        log.warn("if you use this function ,you need to @Override [checkPath(CollectionDataRecordObj dataRecordObj)]");
-        return null;
+
+    default Set<CollectionDataRecordObj> checkPath(CollectionDataRecordObj... obj){
+        Set<CollectionDataRecordObj> checkOk = new HashSet<>();
+        File dir = null;
+        for (CollectionDataRecordObj  recordObj: obj) {
+            String path = recordObj.getDataDirectory();
+            dir = new File(path);
+            if(dir.exists() && dir.isDirectory() && dir.canRead()){
+                CollectionDataRecordObj tmpObj = new CollectionDataRecordObj();
+                tmpObj.setRegexStr(recordObj.getRegexStr());
+                tmpObj.setDataCode(recordObj.getDataCode());
+                tmpObj.setDataCode(path);
+                checkOk.add(tmpObj);
+            }else {
+                log.error("[{}] ==> [exists = {}],[siDir = {}],[canRead = {}]",
+                        recordObj.getDataDirectory(),dir.exists(),dir.isDirectory(),dir.canRead());
+            }
+        }
+        if(checkOk.size() <=0){
+            log.error("There is no Directory to Listener !!!");
+        }
+        return checkOk;
     };
 
     /**
@@ -66,11 +85,20 @@ public interface FileNotifyStrategy {
                 targetFile.getAbsoluteFile(),targetFile.length());
     };
 
+    default void afterWatch(CollectionDataRecordObj dataRecordObj,File file) {
+        log.warn("if you use this ,you need to @Override [{}]","afterWatch(CollectionDataRecordObj dataRecordObj,File file)");
+    };
+
+
 
     /**
      * 监听文件变化，工作模式。
      * @return
      */
     String findStrategyName();
+
+    default void reListen(){
+        log.warn("if you use this function ,you need to @Override [void reListen()]");
+    }
 
 }

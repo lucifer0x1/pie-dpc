@@ -15,8 +15,10 @@ import java.util.Set;
  **/
 public class FileNotifyContext {
     Logger log = LoggerFactory.getLogger(FileNotifyStrategy.class);
-
     private FileNotifyStrategy notify;
+    public boolean STATUS = false;
+
+
     public FileNotifyContext(FileNotifyStrategy notifyStrategy) {
         this.notify = notifyStrategy;
     }
@@ -39,25 +41,20 @@ public class FileNotifyContext {
         log.info("[{}] ==> Thread Starting ....",this.notify.findStrategyName());
     }
 
-    public void autoListener(final CollectionDataRecordObj... dataRecordObjs){
+    public void reListen(){
 
+    }
+
+    public void autoListener(final CollectionDataRecordObj... dataRecordObjs){
+        STATUS = true;
         for (CollectionDataRecordObj dataRecordObj : dataRecordObjs) {
            dataRecordObj.getDataDirectory();
         }
         String filePaths = "";
-        Set<String> pathList =  notify.checkPath(filePaths);
-        for (String filePath : pathList) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    notify.fileWatch(filePath);
-                    try {
-                        Thread.sleep(Integer.MAX_VALUE);
-                    } catch (InterruptedException e) {
-                        log.error("Thread sleep ==> {}",e.getMessage());
-                    }
-                }
-            }).start();
+        Set<CollectionDataRecordObj> dataRecordSet =  notify.checkPath(dataRecordObjs);
+
+        for (CollectionDataRecordObj recordObj : dataRecordSet) {
+            notify.fileWatch(recordObj);
         }
         log.info("[{}] ==> Thread Starting ....",this.notify.findStrategyName());
     }
