@@ -35,8 +35,17 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
     }
 
     @Override
-    public void reListen(){
-
+    public void cancel(){
+        //TODO remove listener
+        wdTree.entrySet().forEach(map ->{
+            try {
+                JNotify_linux.removeWatch(map.getKey().intValue());
+                wdTree.remove(map.getKey());
+                log.debug("cancle listening dir ==> [{}]",map.getValue());
+            } catch (JNotifyException e) {
+                log.warn("error remove watch");
+            }
+        });
     }
 
     @Override

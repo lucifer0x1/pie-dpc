@@ -18,6 +18,18 @@ public class FileNotifyContext {
     private FileNotifyStrategy notify;
     public boolean STATUS = false;
 
+    public boolean isSTATUS() {
+        return STATUS;
+    }
+
+    public void stop(){
+        if(STATUS){
+            this.notify.cancel();
+        }
+    }
+
+    private CollectionDataRecordObj[] collectionDataRecordObjs;
+
 
     public FileNotifyContext(FileNotifyStrategy notifyStrategy) {
         this.notify = notifyStrategy;
@@ -43,14 +55,20 @@ public class FileNotifyContext {
 
     public void reListen(){
 
+        if(STATUS){
+            this.notify.cancel();
+            autoListener(collectionDataRecordObjs);
+        } else {
+            log.warn("this is not running , please run monitor");
+        }
     }
 
     public void autoListener(final CollectionDataRecordObj... dataRecordObjs){
         STATUS = true;
-        for (CollectionDataRecordObj dataRecordObj : dataRecordObjs) {
-           dataRecordObj.getDataDirectory();
-        }
-        String filePaths = "";
+        this.collectionDataRecordObjs = dataRecordObjs;
+//        for (CollectionDataRecordObj dataRecordObj : dataRecordObjs) {
+//           dataRecordObj.getDataDirectory();
+//        }
         Set<CollectionDataRecordObj> dataRecordSet =  notify.checkPath(dataRecordObjs);
 
         for (CollectionDataRecordObj recordObj : dataRecordSet) {

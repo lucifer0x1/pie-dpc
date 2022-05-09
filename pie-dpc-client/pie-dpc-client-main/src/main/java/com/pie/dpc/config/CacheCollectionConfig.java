@@ -33,6 +33,11 @@ public class CacheCollectionConfig {
      */
     public final static ConcurrentHashMap<String, CollectionDataRecordObj> collectionDataRecordCache = new ConcurrentHashMap();
 
+    public CollectionDataRecordObj[] getCollectionDataRecordObj(){
+        CollectionDataRecordObj[] objs = new CollectionDataRecordObj[collectionDataRecordCache.size()];
+        return collectionDataRecordCache.values().toArray(objs);
+    }
+
     public void addRecord(CollectionDataRecordObj dataRecordObj) {
         collectionDataRecordCache.put(dataRecordObj.getDataCode(),dataRecordObj);
     }
@@ -44,6 +49,7 @@ public class CacheCollectionConfig {
     public int getRecordSize(){
         return collectionDataRecordCache.size();
     }
+
 
     /**
      * 加载采集配置文件

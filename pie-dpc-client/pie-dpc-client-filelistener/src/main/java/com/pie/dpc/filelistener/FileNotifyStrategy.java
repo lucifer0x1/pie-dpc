@@ -30,7 +30,7 @@ public interface FileNotifyStrategy {
                 CollectionDataRecordObj tmpObj = new CollectionDataRecordObj();
                 tmpObj.setRegexStr(recordObj.getRegexStr());
                 tmpObj.setDataCode(recordObj.getDataCode());
-                tmpObj.setDataCode(path);
+                tmpObj.setDataDirectory(path);
                 checkOk.add(tmpObj);
             }else {
                 log.error("[{}] ==> [exists = {}],[siDir = {}],[canRead = {}]",
@@ -38,7 +38,7 @@ public interface FileNotifyStrategy {
             }
         }
         if(checkOk.size() <=0){
-            log.error("There is no Directory to Listener !!!");
+            log.error("[CollectionDataRecordObj] ==> There is no Directory to Listener !!!");
         }
         return checkOk;
     };
@@ -97,8 +97,8 @@ public interface FileNotifyStrategy {
      */
     String findStrategyName();
 
-    default void reListen(){
-        log.warn("if you use this function ,you need to @Override [void reListen()]");
+    default void cancel(){
+        log.warn("if you use this function ,you need to @Override [void cancel()]");
     }
 
 }
