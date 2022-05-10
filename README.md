@@ -2,6 +2,11 @@
 
 #准备
 
+java runtime
+~~~
+docker pull azul/zulu-openjdk-alpine
+~~~
+
 ###docker rabbitmq
 ~~~
 docker run -d --hostname rabbitmq-server --name rabbitmq-server   -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin -p 15672:15672 -p 5672:5672 rabbitmq

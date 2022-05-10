@@ -22,8 +22,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
 
     private AfterFileNotify after;
-    private int maskDir = JNotify_linux.IN_ISDIR | JNotify_linux.IN_CREATE | JNotify_linux.IN_DELETE | JNotify_linux.IN_IGNORED  ;
+    private int maskDir = JNotify_linux.IN_ISDIR | JNotify_linux.IN_MOVE | JNotify_linux.IN_CREATE |
+            JNotify_linux.IN_DELETE | JNotify_linux.IN_IGNORED ;
     private int maskFile = JNotify_linux.IN_CLOSE_WRITE | JNotify_linux.IN_MOVE ;
+    private int maskAll = maskDir | maskFile;
 
     private ConcurrentHashMap<Integer,String> wdTree = new ConcurrentHashMap<>();
 
@@ -50,22 +52,23 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
     @Override
     public void fileWatch(CollectionDataRecordObj dataRecord) {
         try {
-            wdTree.put( JNotify_linux.addWatch(dataRecord.getDataDirectory(),maskDir),dataRecord.getDataDirectory());
 
+            int wdDIR  = JNotify_linux.addWatch(dataRecord.getDataDirectory(),maskAll);
+            wdTree.put( wdDIR ,dataRecord.getDataDirectory());
             //TODO 目录下文件变化监听
-            int wdFile  = JNotify_linux.addWatch(dataRecord.getDataDirectory(),maskFile);
-            recordTreeMap.put(wdFile,dataRecord);
+//            int wdFILE  = JNotify_linux.addWatch(dataRecord.getDataDirectory(),maskFile);
+//            recordTreeMap.put(wdFILE,dataRecord);
+            recordTreeMap.put(wdDIR,dataRecord);
 
 
             Set<File> dir = getDirectory(new File(dataRecord.getDataDirectory()));
             log.debug("all dir size => {}",dir.size());
             for (File file : dir) {
-                wdTree.put(JNotify_linux.addWatch(file.getAbsolutePath(),maskDir),file.getAbsolutePath());
+                wdDIR = JNotify_linux.addWatch(file.getAbsolutePath(),maskAll);
+                wdTree.put(wdDIR,file.getAbsolutePath());
                 //TODO 目录下文件变化监听
-                wdFile = JNotify_linux.addWatch(dataRecord.getDataDirectory(),maskFile);
-                recordTreeMap.put(wdFile,dataRecord);
+                recordTreeMap.put(wdDIR,dataRecord);
             }
-            log.debug("wdTree szie == {}",wdTree.size());
             //first listener
             JNotify_linux.setNotifyListener(new LinuxNotifyListener());
 
@@ -79,17 +82,12 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
     public void fileWatch(String filePath) {
         try {
 
-            wdTree.put( JNotify_linux.addWatch(filePath,maskDir),filePath);
-
-            //TODO 目录下文件变化监听
-            JNotify_linux.addWatch(filePath,maskFile);
+            wdTree.put( JNotify_linux.addWatch(filePath,maskAll),filePath);
 
             Set<File> dir = getDirectory(new File(filePath));
             log.debug("all dir size => {}",dir.size());
             for (File file : dir) {
-                wdTree.put(JNotify_linux.addWatch(file.getAbsolutePath(),maskDir),file.getAbsolutePath());
-                //TODO 目录下文件变化监听
-                JNotify_linux.addWatch(filePath,maskFile);
+                wdTree.put(JNotify_linux.addWatch(file.getAbsolutePath(),maskAll),file.getAbsolutePath());
             }
             log.debug("wdTree szie == {}",wdTree.size());
 
@@ -142,20 +140,23 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
         public void notify(String name, int wd, int mask, int cookie) {
             String fullName = wdTree.get(wd)+ File.separator + name;
             File subDir = new File(fullName);
-            log.debug("name = {} , wd = {} , mask = {} , cookie = {} ",
+            log.debug("notify : name = {} , wd = {} , mask = {} , cookie = {} ",
                     fullName,wd,mask,cookie);
-            if((mask & maskDir) == mask ){
+
+            if ((mask & maskFile) == mask) { //
+                //文件变化
+                afterWatch(recordTreeMap.get(wd),new File(fullName));
+                log.debug("file change[{}] wd = {} ,mask = {} , cookie =  {} ",
+                        fullName,wd,mask,cookie);
+            }else if((mask & maskDir) == mask) { // TODO 目录变化 )
                 //目录变化
                 try {
                     if(subDir.exists() && subDir.isDirectory() && subDir.canRead()){
                         // TODO create condition
-                        int subWd = JNotify_linux.addWatch(fullName,maskDir);
+                        int subWd = JNotify_linux.addWatch(fullName,maskAll);
                         wdTree.put(subWd,fullName);
-
                         //TODO 目录下文件变化监听
-                        int wdFile = JNotify_linux.addWatch(fullName,maskFile);
-                        recordTreeMap.put(wdFile,recordTreeMap.get(wd));
-
+                        recordTreeMap.put(subWd,recordTreeMap.get(wd));
                         log.debug("add path[{}]",fullName);
                     }else if (wdTree.containsValue(name)) {
                         // TODO delete condition
@@ -166,12 +167,10 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
                 } catch (JNotifyException e) {
                     log.error("[{}] 目录发生变化",e.getMessage());
                 }
-            }else  { // TODO if ((mask & maskFile) == mask)
-                //文件变化
-                afterWatch(recordTreeMap.get(wd),new File(fullName));
-                log.debug("file change[{}] wd = {} ,mask = {} , cookie =  {} ",
-                        fullName,wd,mask,cookie);
+            }else {
+                log.error("unknow wd = {} , mask = {} ,name = {} ",wd,mask,name);
             }
+            log.debug("wdTree szie == {}",wdTree.size());
         }
     }
 }

@@ -57,12 +57,21 @@ public class LoadLibraryConfig {
 
     @PostConstruct
     public static void initLoad(){
-        String filePath = extractLibrary();
-        if(filePath!=null){
-            System.load(filePath);
-        }else{
-            logger.error("extractLibrary un success");
+
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.startsWith("windows")) {
+            logger.debug("Not load Library Running on win32 => {} ",osName);
+        }else if (osName.startsWith("linux")) {
+            logger.debug("Loading.... Running on Linux => {} ",osName);
+            String filePath = extractLibrary();
+            if(filePath!=null){
+                System.load(filePath);
+            }else{
+                logger.error("extractLibrary un success");
+            }
         }
+
+
     }
 
 }

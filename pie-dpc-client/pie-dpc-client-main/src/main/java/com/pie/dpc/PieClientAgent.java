@@ -30,7 +30,7 @@ public class PieClientAgent implements ApplicationRunner {
 
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args)  {
 
         /** TODO  启动心跳 ， 如果引入starter web 则交给Bean实现 **/
         heartBeatMonitor.autoStart();
@@ -52,6 +52,11 @@ public class PieClientAgent implements ApplicationRunner {
             }
         }
 
+        try {
+            Thread.sleep(Integer.MAX_VALUE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private String usage(){

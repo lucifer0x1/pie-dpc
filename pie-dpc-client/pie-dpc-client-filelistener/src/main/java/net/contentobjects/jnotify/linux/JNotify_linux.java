@@ -1,8 +1,6 @@
 package net.contentobjects.jnotify.linux;
 import com.pie.dpc.filelistener.lib.LoadLibraryConfig;
 import net.contentobjects.jnotify.JNotifyException;
-import net.contentobjects.jnotify.linux.INotifyListener;
-import net.contentobjects.jnotify.linux.JNotifyException_linux;
 
 /**
  * ClassName JNotifyLocal

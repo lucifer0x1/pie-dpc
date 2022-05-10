@@ -65,7 +65,7 @@ public abstract class HeartBeatMonitor {
             log.debug("Sending HeartBearMessage");
             RedisTemplate t = null;
             try {
-            t  = sendHeartBeat();
+                t  = sendHeartBeat();
                 recvHeartBeatCheck();
             } catch (Exception e){
                 log.error("heart beat monitor has  problem {} ,RedisTemplate connection => [{}]" ,
