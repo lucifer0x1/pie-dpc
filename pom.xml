@@ -11,6 +11,8 @@
         <module>pie-dpc-client</module>
         <module>pie-dpc-server</module>
         <module>pie-common</module>
+
+
     </modules>
     <packaging>pom</packaging>
 
@@ -30,6 +32,7 @@
         <jnotify-lib.version>0.94_64bit</jnotify-lib.version>
         <fastjson.version>1.2.75</fastjson.version>
         <swagger.version>2.9.2</swagger.version>
+        <apache-ftp-server.version>1.2.0</apache-ftp-server.version>
     </properties>
 
     <developers>
@@ -48,6 +51,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.ftpserver/ftpserver-core -->
+            <dependency>
+                <groupId>org.apache.ftpserver</groupId>
+                <artifactId>ftpserver-core</artifactId>
+                <version>${apache-ftp-server.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>commons-io</groupId>

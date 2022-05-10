@@ -10,10 +10,6 @@ import java.io.File;
  **/
 public class FtpTransferDecorator implements FileTransferFunction {
 
-
-
-
-
     @Override
     public boolean sendingFile(File file) {
 
