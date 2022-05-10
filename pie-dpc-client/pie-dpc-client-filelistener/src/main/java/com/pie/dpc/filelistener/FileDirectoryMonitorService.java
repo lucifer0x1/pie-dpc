@@ -14,12 +14,11 @@ import org.springframework.stereotype.Component;
 public class FileDirectoryMonitorService {
     Logger log = LoggerFactory.getLogger(FileDirectoryMonitorService.class);
 
-    private final AfterFileNotify afterFileNotify;
+    private AfterFileNotify afterFileNotify;
     private FileNotifyContext context;
 
 
     public FileDirectoryMonitorService(AfterFileNotify afterFileNotify) {
-
         this.afterFileNotify = afterFileNotify;
     }
 
@@ -53,7 +52,6 @@ public class FileDirectoryMonitorService {
             strategy = new LinuxFileNotifyStrategyService(afterFileNotify);
         }
 
-
         FileNotifyContext context = new FileNotifyContext(strategy);
         context.autoListener(path);
     }
@@ -67,7 +65,6 @@ public class FileDirectoryMonitorService {
          * TODO 加载so
          * 非Win32方式，MAC 和 Linux
          */
-
 
         return false;
     }

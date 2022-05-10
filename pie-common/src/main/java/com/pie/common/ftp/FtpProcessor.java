@@ -13,7 +13,7 @@ import java.util.List;
  **/
 public interface FtpProcessor {
 
-    boolean uploadFile(String path, String fileName, String originFileName);
+    boolean uploadFile(String path, String fileName, String originFilePathName);
 
     boolean uploadFile(String path, String fileName, InputStream inputStream) throws IOException;
 

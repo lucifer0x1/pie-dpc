@@ -61,13 +61,13 @@ public class DefaultFtpProcessor implements FtpProcessor {
      *
      * @param path           ftp服务器保存地址
      * @param fileName       上传到ftp的文件名
-     * @param originFileName 等待上传的文件名（绝对地址或路径）
+     * @param originFilePathName 等待上传的文件名（绝对地址或路径）
      */
     @Override
-    public boolean uploadFile(String path, String fileName, String originFileName) {
+    public boolean uploadFile(String path, String fileName, String originFilePathName) {
         boolean flag = false;
         try {
-            InputStream inputStream  = new FileInputStream(new File(originFileName));
+            InputStream inputStream  = new FileInputStream(new File(originFilePathName));
             flag=uploadFile( path,  fileName,  inputStream);
         } catch (Exception e) {
             //log.error("上传文件出错！", (Object) e.getStackTrace());

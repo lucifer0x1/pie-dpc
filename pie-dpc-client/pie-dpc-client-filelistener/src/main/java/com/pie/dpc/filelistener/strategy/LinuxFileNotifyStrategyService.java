@@ -144,10 +144,10 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
                     fullName,wd,mask,cookie);
 
             if ((mask & maskFile) == mask) { //
-                //文件变化
-                afterWatch(recordTreeMap.get(wd),new File(fullName));
+                //TODO 文件变化
                 log.debug("file change[{}] wd = {} ,mask = {} , cookie =  {} ",
                         fullName,wd,mask,cookie);
+                afterWatch(recordTreeMap.get(wd),new File(fullName));
             }else if((mask & maskDir) == mask) { // TODO 目录变化 )
                 //目录变化
                 try {

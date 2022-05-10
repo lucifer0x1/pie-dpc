@@ -15,9 +15,11 @@ public interface AfterFileNotify {
 
     Logger log = LoggerFactory.getLogger(AfterFileNotify.class);
 
-    void afterFileNotifyFunction(File file);
+    default void afterFileNotifyFunction(File file){
+        log.warn("if you ues this, you need to @Override afterFileNotifyFunction(File file)");
+    };
 
-    default  void afterFileNotifyFunction(CollectionDataRecordObj recordObj,File file){
-        log.warn("if you ues this, you need to @Override afterFileNotifyFunction(CollectionDataRecordObj recordObj)");
+    default void afterFileNotifyFunction(CollectionDataRecordObj recordObj,File file){
+        log.warn("if you ues this, you need to @Override afterFileNotifyFunction(CollectionDataRecordObj recordObj,File file)");
     };
 }
