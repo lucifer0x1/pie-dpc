@@ -90,7 +90,7 @@ public class DefaultFtpProcessor implements FtpProcessor {
         try {
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
             createDirectory(path, ftpClient);
-            ftpClient.makeDirectory(path);
+//            ftpClient.makeDirectory(path);
             ftpClient.changeWorkingDirectory(path);
             ftpClient.storeFile(fileName, inputStream);
             flag = true;
@@ -179,14 +179,22 @@ public class DefaultFtpProcessor implements FtpProcessor {
         if (!directory.equalsIgnoreCase("/") && !changeWorkingDirectory(directory, ftpClient)) {
             int start = 0;
             int end = 0;
-            if (directory.startsWith("/")) {
-                start = 1;
+
+            while (start < directory.length()-1){
+                if (directory.substring(start,start+1).equals(File.separator)) {
+                    start = start +1;
+                }else {
+                    break;
+                }
             }
+
             end = directory.indexOf("/", start);
             String path = "";
             String paths = "";
+
             do {
-                String subDirectory = new String(remote.substring(start, end).getBytes(ftpProperties.getEncoding()), FtpConstants.DEFAULT_FTP_PATH_ENCODING);
+                String subDirectory = new String(remote.substring(start, end).getBytes(ftpProperties.getEncoding()),
+                        FtpConstants.DEFAULT_FTP_PATH_ENCODING);
                 path = path + "/" + subDirectory;
                 if (!existFile(path, ftpClient)) {
                     if (makeDirectory(subDirectory, ftpClient)) {
@@ -198,10 +206,22 @@ public class DefaultFtpProcessor implements FtpProcessor {
                 } else {
                     changeWorkingDirectory(subDirectory, ftpClient);
                 }
-                paths = paths + "/" + subDirectory;
+
                 start = end + 1;
+                while (start < directory.length()-1){
+                    if (directory.substring(start,start+1).equals(File.separator)) {
+                        start = start +1;
+                    }else {
+                        break;
+                    }
+                }
+
+
+
                 end = directory.indexOf("/", start);
-            } while (end <= start);
+                log.debug("directory => {} ,start = {} , end = {} " ,directory,start,end);
+//                paths = paths + "/" + subDirectory;
+            } while (start < end && end > 0);
         }
         return true;
     }
@@ -215,10 +235,12 @@ public class DefaultFtpProcessor implements FtpProcessor {
     @Override
     public boolean existFile(String path, FTPClient ftpClient) throws IOException {
         boolean flag = false;
+
         FTPFile[] files = ftpClient.listFiles(path);
         if (files.length > 0) {
             flag = true;
         }
+        log.debug("checkPath {} exits status = [{}]",path,flag);
         return flag;
     }
 

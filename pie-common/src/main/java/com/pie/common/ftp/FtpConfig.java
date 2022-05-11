@@ -25,7 +25,7 @@ import javax.annotation.PreDestroy;
 @Configuration
 @ConditionalOnClass({GenericObjectPool.class, FTPClient.class})
 @PropertySource("classpath:ftpconfig.properties")
-@ConditionalOnProperty(prefix = "pie.dpc.client.ftp", name = "isopen", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "pie.dpc.ftp", name = "isopen", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(FtpProperties.class)
 public class FtpConfig {
 

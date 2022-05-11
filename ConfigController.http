@@ -1,1 +1,8 @@
-GET http://localhost:63844/recv?dataCode=code1&dataDirectory=/root/data
+
+###
+# window virtual box
+GET http://localhost:52578/recv?dataCode=code1&dataDirectory=/root/data
+
+###
+# mac os docker
+GET http://localhost:52578/recv?dataCode=code1&dataDirectory=/opt

@@ -29,8 +29,8 @@ public class FtpClientPooledObjectFactory implements PooledObjectFactory<FTPClie
     public PooledObject<FTPClient> makeObject() throws Exception {
         FTPClient ftpClient = new FTPClient();
         try {
-            ftpClient.connect(ftpProperties.getIp(), Integer.valueOf(ftpProperties.getPort()));
-            ftpClient.login(ftpProperties.getUsername(), ftpProperties.getPassword());
+            ftpClient.connect(ftpProperties.getFtpIp(), Integer.valueOf(ftpProperties.getFtpPort()));
+            ftpClient.login(ftpProperties.getFtpUserName(), ftpProperties.getFtpUserPassword());
             log.info("连接ftp服务返回码：" + ftpClient.getReplyCode());
             ftpClient.setBufferSize(ftpProperties.getBufferSize());
             ftpClient.setControlEncoding(ftpProperties.getEncoding());

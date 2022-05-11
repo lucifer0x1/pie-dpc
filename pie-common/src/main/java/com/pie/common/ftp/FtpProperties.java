@@ -8,49 +8,49 @@ import org.springframework.context.annotation.PropertySource;
  * @Date 2022/5/6 00:52
  * @Description TODO :
  **/
-@PropertySource("classpath:ftpclient.properties")
-@ConfigurationProperties(prefix = "pie.dpc.client.ftp")
+@PropertySource("classpath:ftpconfig.properties")
+@ConfigurationProperties(prefix = "pie.dpc.ftp")
 public class FtpProperties {
 
-    private String  ip;
-    private String  port;
-    private String  username;
-    private String  password;
+    private String ftpIp;
+    private String ftpPort;
+    private String ftpUserName;
+    private String ftpUserPassword;
     private Integer initialSize = 0;
     private String  encoding = "UTF-8";
     private Integer bufferSize = 4096;
     private Integer retryCount = 3;
 
-    public String getIp() {
-        return ip;
+    public String getFtpIp() {
+        return ftpIp;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setFtpIp(String ftpIp) {
+        this.ftpIp = ftpIp;
     }
 
-    public String getPort() {
-        return port;
+    public String getFtpPort() {
+        return ftpPort;
     }
 
-    public void setPort(String port) {
-        this.port = port;
+    public void setFtpPort(String ftpPort) {
+        this.ftpPort = ftpPort;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFtpUserName() {
+        return ftpUserName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFtpUserName(String ftpUserName) {
+        this.ftpUserName = ftpUserName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getFtpUserPassword() {
+        return ftpUserPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setFtpUserPassword(String ftpUserPassword) {
+        this.ftpUserPassword = ftpUserPassword;
     }
 
     public Integer getInitialSize() {

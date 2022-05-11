@@ -1,11 +1,14 @@
 package com.pie.common.notify;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -58,19 +61,19 @@ public class MessageObj {
     public MessageObj(Map<String,Object> param){
         MessageObj obj = new MessageObj();
         for (Field declaredField : obj.getClass().getDeclaredFields()) {
+            String setName = "set"+ StringUtils.capitalize(declaredField.getName());
             try {
-                Method method = obj.getClass().getDeclaredMethod("set"+declaredField.getName(),declaredField.getClass());
+                Method method = obj.getClass().getDeclaredMethod(setName,declaredField.getClass());
                 method.invoke(obj,param.get(declaredField.getName()));
             } catch (NoSuchMethodException e) {
-                System.out.println("can not find funciton => [set"+declaredField.getName()+"] ");
+                System.out.println("can not find funciton => ["+setName+"] ");
             } catch (InvocationTargetException e) {
-                System.out.println("can not Invoke => [set"+declaredField.getName()+"] ");
+                System.out.println("can not Invoke => ["+setName+"] ");
             } catch (IllegalAccessException e) {
-                System.out.println("can not access  => [set"+declaredField.getName()+"] ");
+                System.out.println("can not access  => ["+setName+"] ");
             }
         }
     }
-
 
     public MessageObj(MessageType type,
                       String filename,
@@ -104,15 +107,16 @@ public class MessageObj {
 
 
         for (Field field : this.getClass().getDeclaredFields()) {
+            String getName = StringUtils.capitalize(field.getName());
             try {
-                Method method = this.getClass().getDeclaredMethod("get" + field.getName());
+                Method method = this.getClass().getDeclaredMethod(getName);
                 obj.put(field.getName(),method.invoke(this));
             } catch (NoSuchMethodException e) {
-                System.out.println("can not find funciton => [get"+field.getName()+"] ");
+                System.out.println("can not find funciton => ["+getName+"] ");
             } catch (InvocationTargetException e) {
-                System.out.println("can not Invoke => [get"+field.getName()+"] ");
+                System.out.println("can not Invoke => ["+getName+"] ");
             } catch (IllegalAccessException e) {
-                System.out.println("can not access  => [get"+field.getName()+"] ");
+                System.out.println("can not access  => ["+getName+"] ");
             }
         }
         return obj;
