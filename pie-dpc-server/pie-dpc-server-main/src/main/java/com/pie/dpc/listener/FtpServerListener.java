@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebListener;
  * Author wangxiyue.xy@163.com
  */
 //@WebListener
+@Deprecated
 public class FtpServerListener implements ServletContextListener {
 
     @Autowired

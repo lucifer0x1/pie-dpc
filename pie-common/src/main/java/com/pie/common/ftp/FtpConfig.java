@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PreDestroy;
 
@@ -23,7 +24,8 @@ import javax.annotation.PreDestroy;
  **/
 @Configuration
 @ConditionalOnClass({GenericObjectPool.class, FTPClient.class})
-@ConditionalOnProperty(prefix = "ftp", name = "isopen", havingValue = "true", matchIfMissing = true)
+@PropertySource("classpath:ftpconfig.properties")
+@ConditionalOnProperty(prefix = "pie.dpc.client.ftp", name = "isopen", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(FtpProperties.class)
 public class FtpConfig {
 

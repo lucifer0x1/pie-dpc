@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -65,7 +66,11 @@ public class RabbitMQNotifySender implements SendNotifyFunction {
     @Override
     public boolean sendNotifyMessage(MessageObj notify) {
         try {
-            rabbitTemplate.convertAndSend(this.exchange, this.routeKey,notify.toString());
+            rabbitTemplate.convertAndSend(this.exchange,this.routeKey,msg->{
+                notify.toMap().forEach((k,v) ->msg.getMessageProperties().setHeader(k,v));
+                return msg;
+            });
+//            rabbitTemplate.convertAndSend(this.exchange, this.routeKey,notify.toString());
         } catch (AmqpException e){
             e.printStackTrace();
             log.warn("RabbitMQ Sender Throws Exception ===> {} ",e.getMessage());

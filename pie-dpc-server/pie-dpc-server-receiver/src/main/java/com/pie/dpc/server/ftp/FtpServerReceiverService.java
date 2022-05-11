@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * @Author wangxiyue.xy@163.com
@@ -30,6 +31,10 @@ public class FtpServerReceiverService {
     private final Logger log = LoggerFactory.getLogger(FtpServerReceiverService.class);
 
     private FtpServer server;
+
+    public FtpServerReceiverService () {
+
+    }
 
     @Autowired
     FtpPropertiesConfig ftpConfig;
@@ -58,9 +63,15 @@ public class FtpServerReceiverService {
         log.info("ftp server starting on [{}]",ftpConfig.getFtpPort());
     }
 
-    private FtpServer initFtp(){
-        FtpServerFactory serverFactory = new FtpServerFactory();
+    private void  setLogLevel(){
+        log.debug("set ftp log level = > {}" ,Level.SEVERE);
+        java.util.logging.Logger javaUtilLogging = java.util.logging.Logger.getLogger("org.apache.ftpserver.listener.nio.FtpLoggingFilter");
+        javaUtilLogging.setLevel(Level.SEVERE);
+    }
 
+    private FtpServer initFtp(){
+
+        FtpServerFactory serverFactory = new FtpServerFactory();
         /**
          *  ftp connection config
          * */

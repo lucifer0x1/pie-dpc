@@ -1,7 +1,12 @@
 package com.pie.common.notify;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 发现文件后 ，上传服务端,同时发送该结构(MessageObj)消息
@@ -50,6 +55,22 @@ public class MessageObj {
         this.sendMsgTime =  new Date();
     }
 
+    public MessageObj(Map<String,Object> param){
+        MessageObj obj = new MessageObj();
+        for (Field declaredField : obj.getClass().getDeclaredFields()) {
+            try {
+                Method method = obj.getClass().getDeclaredMethod("set"+declaredField.getName(),declaredField.getClass());
+                method.invoke(obj,param.get(declaredField.getName()));
+            } catch (NoSuchMethodException e) {
+                System.out.println("can not find funciton => [set"+declaredField.getName()+"] ");
+            } catch (InvocationTargetException e) {
+                System.out.println("can not Invoke => [set"+declaredField.getName()+"] ");
+            } catch (IllegalAccessException e) {
+                System.out.println("can not access  => [set"+declaredField.getName()+"] ");
+            }
+        }
+    }
+
 
     public MessageObj(MessageType type,
                       String filename,
@@ -76,6 +97,25 @@ public class MessageObj {
                 ", dataForecastTime=" + dataForecastTime +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public Map<String,Object> toMap(){
+        HashMap<String,Object> obj = new HashMap<>();
+
+
+        for (Field field : this.getClass().getDeclaredFields()) {
+            try {
+                Method method = this.getClass().getDeclaredMethod("get" + field.getName());
+                obj.put(field.getName(),method.invoke(this));
+            } catch (NoSuchMethodException e) {
+                System.out.println("can not find funciton => [get"+field.getName()+"] ");
+            } catch (InvocationTargetException e) {
+                System.out.println("can not Invoke => [get"+field.getName()+"] ");
+            } catch (IllegalAccessException e) {
+                System.out.println("can not access  => [get"+field.getName()+"] ");
+            }
+        }
+        return obj;
     }
 
     public MessageType getType() {

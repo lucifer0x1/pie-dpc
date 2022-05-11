@@ -1,5 +1,6 @@
 package com.pie.dpc.notify.rabbitmq;
 
+import com.pie.common.config.LOCAL_CONSTANTS_CONFIG;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -16,9 +17,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfigure {
 
-    public static final String DEFAULT_EXCHANGE_NAME = "DEFAULT_EXCHANGE_PIE_DPC";
-    public static final String DEFAULT_QUEUE_FILE_ARRIVAL = "FILE_ARRIVAL_QUEUE";
-    public static final String DEFAULT_ROUTE_FILE_ARRIVAL = "FILE_ARRIVAL_ROUTE";
+    public static final String DEFAULT_EXCHANGE_NAME = LOCAL_CONSTANTS_CONFIG.DEFAULT_EXCHANGE_NAME;
+    public static final String DEFAULT_QUEUE_FILE_ARRIVAL =LOCAL_CONSTANTS_CONFIG.DEFAULT_QUEUE_FILE_ARRIVAL;
+    public static final String DEFAULT_ROUTE_FILE_ARRIVAL = LOCAL_CONSTANTS_CONFIG.DEFAULT_ROUTE_FILE_ARRIVAL;
 
 
     /**

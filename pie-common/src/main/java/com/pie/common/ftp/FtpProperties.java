@@ -1,13 +1,15 @@
 package com.pie.common.ftp;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * @Author wangxiyue.xy@163.com
  * @Date 2022/5/6 00:52
  * @Description TODO :
  **/
-@ConfigurationProperties(prefix = "ftp")
+@PropertySource("classpath:ftpclient.properties")
+@ConfigurationProperties(prefix = "pie.dpc.client.ftp")
 public class FtpProperties {
 
     private String  ip;

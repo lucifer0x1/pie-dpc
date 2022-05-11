@@ -1,17 +1,11 @@
 package com.pie.dpc;
 
-import com.pie.dpc.listener.FtpServerListener;
 import com.pie.dpc.server.ftp.FtpServerReceiverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.context.annotation.ComponentScan;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
 /**
  * @Author wangxiyue.xy@163.com

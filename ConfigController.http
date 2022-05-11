@@ -1,1 +1,1 @@
-GET http://localhost:60066/recv?dataCode=code1&dataDirectory=/root/data
+GET http://localhost:63844/recv?dataCode=code1&dataDirectory=/root/data
