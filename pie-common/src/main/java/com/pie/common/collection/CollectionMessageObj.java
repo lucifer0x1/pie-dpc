@@ -43,11 +43,11 @@ public class CollectionMessageObj {
      * 禁止配置监听重复目录，所以用目录最为key 值
      * @param dataRecordObj
      */
-    public  void addDataConfig(CollectionDataRecordObj dataRecordObj){
+    public  void addDataRecord(CollectionDataRecordObj dataRecordObj){
          dataConfigRecords.put(dataRecordObj.getDataDirectory(),dataRecordObj);
     }
 
-    public CollectionDataRecordObj findDataRecord(String directoryPathStr){
+    public CollectionDataRecordObj getDataRecord(String directoryPathStr){
         // 文件路径地址字符转统一格式化
         return dataConfigRecords.get(new File(directoryPathStr).toPath().toString());
     }
@@ -110,15 +110,15 @@ public class CollectionMessageObj {
     public static void main(String[] args) {
 
         CollectionMessageObj obj = new CollectionMessageObj();
-        obj.addDataConfig(new CollectionDataRecordObj(
+        obj.addDataRecord(new CollectionDataRecordObj(
                 "this is data code",
                 "this is data directory",
                 "this is regex to find file"));
-        obj.addDataConfig(new CollectionDataRecordObj(
+        obj.addDataRecord(new CollectionDataRecordObj(
                 "a1",
                 "a2/",
                 "a3"));
-        obj.addDataConfig(new CollectionDataRecordObj(
+        obj.addDataRecord(new CollectionDataRecordObj(
                 "b",
                 "a2",
                 "b"));

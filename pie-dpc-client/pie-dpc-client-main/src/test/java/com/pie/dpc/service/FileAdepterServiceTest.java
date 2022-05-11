@@ -5,6 +5,7 @@ import com.pie.common.ftp.FtpProcessor;
 import com.pie.common.notify.MessageObj;
 import com.pie.common.notify.MessageType;
 import com.pie.dpc.notify.rabbitmq.RabbitMQNotifySender;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -81,5 +82,9 @@ class FileAdepterServiceTest {
 
         afterFileNotify.afterFileNotifyFunction(recordObj,file);
 
+    }
+
+    public static void main(String[] args) {
+        System.out.println(StringUtils.capitalize("get"));
     }
 }

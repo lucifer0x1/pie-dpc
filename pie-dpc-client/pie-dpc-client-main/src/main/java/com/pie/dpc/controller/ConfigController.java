@@ -69,4 +69,11 @@ public class ConfigController {
         return ResultOK.ok().setReturnCode(0).setData(config);
     }
 
+    @RequestMapping(value = "/install",method = RequestMethod.GET)
+    @ApiOperation("客户端安装初始化服务端配置参数")
+    public ResultOK installClient(CollectionMessageObj messageObj){
+        System.out.println(messageObj.toString());
+        return ResultOK.ok().setReturnCode(0).setData(messageObj);
+    }
+
 }
