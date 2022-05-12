@@ -23,17 +23,10 @@ public class PieClientAgent implements ApplicationRunner {
     }
 
     @Autowired
-    RedisHeartBeatMonitor heartBeatMonitor;
-
-    @Autowired
     FileDirectoryMonitorService monitorService;
-
 
     @Override
     public void run(ApplicationArguments args)  {
-
-        /** TODO  启动心跳 ， 如果引入starter web 则交给Bean实现 **/
-        heartBeatMonitor.autoStart();
 
         if(args.containsOption("path")){
             Set<String> paths = new HashSet<>();

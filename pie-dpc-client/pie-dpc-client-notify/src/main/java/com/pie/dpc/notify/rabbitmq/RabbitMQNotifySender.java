@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,15 +23,13 @@ import org.springframework.stereotype.Component;
 public class RabbitMQNotifySender implements SendNotifyFunction {
     Logger log = LoggerFactory.getLogger(RabbitMQNotifySender.class);
 
-    private String routeKey = null;
-    private String exchange = null;
+    private String routeKey;
+    private String exchange;
 
-
-    public RabbitMQNotifySender() {
+    public RabbitMQNotifySender(){
         this.routeKey = RabbitMQConfigure.DEFAULT_ROUTE_FILE_ARRIVAL;
         this.exchange = RabbitMQConfigure.DEFAULT_EXCHANGE_NAME;
     }
-
 
     public RabbitMQNotifySender(String routeKey, String directExchange) {
 
@@ -51,17 +50,19 @@ public class RabbitMQNotifySender implements SendNotifyFunction {
     @Autowired
     RabbitTemplate rabbitTemplate;
 
-    public boolean sendNotifyMessage(String exchange,String routeKey,MessageObj notify) {
-        log.debug("Custom sender exchange = {} , routeKey = {}" ,exchange,routeKey);
-        try {
-            rabbitTemplate.convertAndSend(exchange, routeKey,notify.toString());
-        } catch (AmqpException e){
-            e.printStackTrace();
-            log.warn("RabbitMQ Sender Throws Exception ===> {} ",e.getMessage());
-            return false;
-        }
-        return true;
-    }
+//    public boolean sendNotifyMessage(String exchange,String routeKey,MessageObj notify) {
+//        log.debug("Custom sender exchange = {} , routeKey = {}" ,exchange,routeKey);
+//        try {
+//            rabbitTemplate.convertAndSend(exchange, routeKey,notify.toString());
+//        } catch (AmqpException e){
+//            e.printStackTrace();
+//            log.warn("RabbitMQ Sender Throws Exception ===> {} ",e.getMessage());
+//            return false;
+//        }
+//        return true;
+//    }
+
+
 
     @Override
     public boolean sendNotifyMessage(MessageObj notify) {

@@ -1,8 +1,10 @@
 package com.pie.common.heartbeat;
 
 
+import com.pie.common.collection.CollectionMessageObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +22,7 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
     /**
      * 心跳间隔时间
      */
-    @Value("${heatbeat_step_time_seconds:10}")
+    @Value("${heartbeat_step_time_seconds:10}")
     private Long TIME_STEP_SECONDS;
 
     /**
@@ -30,7 +32,7 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
      * redis expirtime
      * @see @TIME_STEP_SECONDS
      */
-    @Value("${heatbeat_timeout_seconds:100}")
+    @Value("${heartbeat_timeout_seconds:100}")
     private Long TIME_OUT_SECONDS;
 
     /**
@@ -40,14 +42,25 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
      * （2） 可以从Nacos 识别获取本地（误差较小）
      * （3） 获取本地网卡信息（存在误差较大）
      */
-    @Value("${heatbeat_agent_ipaddress:127.0.0.1}")
+    @Value("${heartbeat_agent_ipaddress:127.0.0.1}")
     private String AGENT_LOCAL_ADDRESS;
+
+    @Value("${heartbeat_agent_clientId:test-client-agent-id}")
+    private String CLIENT_ID;
 
     @Value("${redis.key.profix:DATA_COLLECTION}")
     private String REDIS_KEY_PROFIX;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    /**
+     * 用于安装使用
+     * @param obj
+     */
+    public void install(CollectionMessageObj obj){
+        this.CLIENT_ID =obj.getClientID();
+    }
 
 //    @PostConstruct
     public void autoStart(){
@@ -64,6 +77,7 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
     }
 
 
+
     /**
      * TODO rediskey --> ${profix(projectName)}:${ip}:heartbeat , value --> ${JSON(msg)}
      * @return
@@ -71,12 +85,14 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
     @Override
     public RedisTemplate sendHeartBeat() {
         HeartBeatMessageObj msg = new HeartBeatMessageObj();
+        msg.setClientID(CLIENT_ID);
         msg.setIpAddress(AGENT_LOCAL_ADDRESS);
         String key =  REDIS_KEY_PROFIX + ":" + msg.getIpAddress() + ":heartbeat";
         redisTemplate.opsForValue().set(key,msg.toString(),TIME_OUT_SECONDS, TimeUnit.SECONDS);
         log.debug(msg.toString());
         return redisTemplate;
     }
+
 
     @Override
     public void recvHeartBeatCheck() {

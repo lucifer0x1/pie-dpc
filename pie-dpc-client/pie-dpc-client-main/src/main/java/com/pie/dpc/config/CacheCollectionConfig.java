@@ -1,10 +1,10 @@
 package com.pie.dpc.config;
 
 import com.pie.common.collection.CollectionDataRecordObj;
+import com.pie.common.collection.CollectionMessageObj;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +25,34 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 public class CacheCollectionConfig {
 
+    private static boolean isInstall = false;
+
     Logger log = LoggerFactory.getLogger(CacheCollectionConfig.class);
+
+    /**
+     * install param
+     * */
+    private static  CollectionMessageObj installParam = new CollectionMessageObj();
+
+    /******************************* install init cache**********************************/
+    synchronized
+    public void addInitCache(CollectionMessageObj obj){
+        if(isInstall){
+            System.out.println("install param is not Empty");
+            System.out.println(installParam.toString());
+            System.out.println("clean installParam");
+            installParam =null;
+            System.gc();
+        }
+        installParam = obj;
+    }
+
+    public CollectionMessageObj getInstallParam(){
+        if(installParam==null){
+            installParam =new CollectionMessageObj();
+        }
+        return installParam;
+    }
 
     /**
      * key = CollectionDataRecordObj.dataCode

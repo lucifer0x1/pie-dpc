@@ -74,6 +74,10 @@ public class HeartBeatMessageObj {
         this.sendTime = new Date();
     }
 
+    public void setClientID(String clientID){
+        this.clientID = clientID;
+    };
+
     public HeartBeatMessageObj(String ipAddress,String clientID, String[] listenerDir, String[] listenerRegex) {
         this.sendTime = new Date();
         this.ipAddress = ipAddress;

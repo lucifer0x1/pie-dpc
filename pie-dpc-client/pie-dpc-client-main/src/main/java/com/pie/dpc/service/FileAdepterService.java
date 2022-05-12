@@ -4,6 +4,7 @@ import com.pie.common.collection.CollectionDataRecordObj;
 import com.pie.common.ftp.FtpProcessor;
 import com.pie.common.notify.MessageObj;
 import com.pie.common.notify.MessageType;
+import com.pie.dpc.config.CacheCollectionConfig;
 import com.pie.dpc.filelistener.AfterFileNotify;
 import com.pie.dpc.notify.rabbitmq.RabbitMQNotifySender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class FileAdepterService implements AfterFileNotify {
 
     @Autowired
     FtpProcessor ftpSender;
+
+    @Autowired
+    CacheCollectionConfig config;
 
     @Override
     public void afterFileNotifyFunction(CollectionDataRecordObj recordObj, File file){
@@ -52,15 +56,15 @@ public class FileAdepterService implements AfterFileNotify {
         if(isFind){
             //TODO 发送ftp和消息
             if(ftpSender.uploadFile(recordObj.getDataCode(), file.getName(),file.getAbsolutePath())){
+                log.debug("ftp upload OK!!! ");
                 MessageObj msg = new MessageObj();
+                msg.setClientId(config.getInstallParam().getClientID());
                 msg.setFilename(file.getName());
                 msg.setType(MessageType.FILE);
                 msg.setTargetPath(recordObj.getDataCode());
                 mqSender.sendNotifyMessage(msg);
             };
         }
-
     }
-
 }
 

@@ -2,6 +2,7 @@ package com.pie.dpc.controller;
 
 import com.pie.common.collection.CollectionDataRecordObj;
 import com.pie.common.collection.CollectionMessageObj;
+import com.pie.common.heartbeat.RedisHeartBeatMonitor;
 import com.pie.dpc.config.CacheCollectionConfig;
 import com.pie.dpc.filelistener.FileDirectoryMonitorService;
 import io.swagger.annotations.Api;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @Author wangxiyue.xy@163.com
@@ -69,11 +72,23 @@ public class ConfigController {
         return ResultOK.ok().setReturnCode(0).setData(config);
     }
 
+
+    @Autowired
+    RedisHeartBeatMonitor heartBeatMonitor;
+
+    @PostConstruct
+    public void startHeartBeat(){
+        /** TODO  启动心跳 ， 如果引入starter web 则交给Bean实现 **/
+        heartBeatMonitor.autoStart();
+    }
+
     @RequestMapping(value = "/install",method = RequestMethod.GET)
     @ApiOperation("客户端安装初始化服务端配置参数")
-    public ResultOK installClient(CollectionMessageObj messageObj){
-        System.out.println(messageObj.toString());
-        return ResultOK.ok().setReturnCode(0).setData(messageObj);
+    public ResultOK installClient(CollectionMessageObj obj){
+        System.out.println(obj.toString());
+        cacheConfig.addInitCache(obj);
+        heartBeatMonitor.install(obj);
+        return ResultOK.ok().setReturnCode(0).setData(obj);
     }
 
 }

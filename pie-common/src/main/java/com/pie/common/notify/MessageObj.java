@@ -18,6 +18,9 @@ public class MessageObj {
 
     private SimpleDateFormat sdf_yyyyMMddHHmmss = new SimpleDateFormat("yyyyMMddHHmmss");
 
+
+    private String clientId;
+
     /**
      * 消息类型
      */
@@ -107,7 +110,7 @@ public class MessageObj {
 
 
         for (Field field : this.getClass().getDeclaredFields()) {
-            String getName = StringUtils.capitalize(field.getName());
+            String getName = "get" +StringUtils.capitalize(field.getName());
             try {
                 Method method = this.getClass().getDeclaredMethod(getName);
                 obj.put(field.getName(),method.invoke(this));
@@ -179,4 +182,11 @@ public class MessageObj {
     }
 
 
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
 }
