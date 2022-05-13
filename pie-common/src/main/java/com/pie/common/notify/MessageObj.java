@@ -62,20 +62,23 @@ public class MessageObj {
     }
 
     public MessageObj(Map<String,Object> param){
-        MessageObj obj = new MessageObj();
-        for (Field declaredField : obj.getClass().getDeclaredFields()) {
-            String setName = "set"+ StringUtils.capitalize(declaredField.getName());
+        param.forEach((k,v)->{
+
+            String setName = "set"+ StringUtils.capitalize(k);
             try {
-                Method method = obj.getClass().getDeclaredMethod(setName,declaredField.getClass());
-                method.invoke(obj,param.get(declaredField.getName()));
+                Method method = this.getClass().getDeclaredMethod(setName,v.getClass() );
+                method.invoke(this,v);
             } catch (NoSuchMethodException e) {
-                System.out.println("can not find funciton => ["+setName+"] ");
+                System.out.println("can not find funciton => ["+setName+"]   if has param  object=>"+ v.getClass());
             } catch (InvocationTargetException e) {
                 System.out.println("can not Invoke => ["+setName+"] ");
             } catch (IllegalAccessException e) {
                 System.out.println("can not access  => ["+setName+"] ");
+            } catch (Exception e){
+                System.out.println(setName +" unknow exception =>" + e.getMessage());
             }
-        }
+        });
+
     }
 
     public MessageObj(MessageType type,
@@ -107,7 +110,6 @@ public class MessageObj {
 
     public Map<String,Object> toMap(){
         HashMap<String,Object> obj = new HashMap<>();
-
 
         for (Field field : this.getClass().getDeclaredFields()) {
             String getName = "get" +StringUtils.capitalize(field.getName());

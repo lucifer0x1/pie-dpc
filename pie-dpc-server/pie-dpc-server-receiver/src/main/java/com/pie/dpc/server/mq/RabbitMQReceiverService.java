@@ -49,10 +49,15 @@ public class RabbitMQReceiverService {
      */
     private void checkFile(Message msg){
         String ftpBasePath = config.getFtpBasePath();
+//        msg.getMessageProperties().getHeaders().forEach((k,v)->{
+//            log.debug("k = {} , v = {}",k,v);
+//        });
         MessageObj obj = new MessageObj(msg.getMessageProperties().getHeaders());
         File targetFile = new File(ftpBasePath + File.separator + obj.getTargetPath() + File.separator + obj.getFilename());
         if(targetFile.exists()){
             log.info("{} 文件存在 length = {}",targetFile.getAbsoluteFile(),targetFile.length());
+        }else {
+            log.warn("{} 文件不存在 ",targetFile.getAbsoluteFile());
         }
     }
 }

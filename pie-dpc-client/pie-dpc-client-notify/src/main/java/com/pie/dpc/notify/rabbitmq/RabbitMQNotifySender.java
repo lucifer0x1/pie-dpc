@@ -67,13 +67,15 @@ public class RabbitMQNotifySender implements SendNotifyFunction {
     @Override
     public boolean sendNotifyMessage(MessageObj notify) {
         try {
-            rabbitTemplate.convertAndSend(this.exchange,this.routeKey,msg->{
+            log.debug("exchangeName = {} , routeKey = {}",this.exchange,this.routeKey);
+
+
+            rabbitTemplate.convertAndSend(this.exchange,this.routeKey,new String(),msg->{
                 notify.toMap().forEach((k,v) ->msg.getMessageProperties().setHeader(k,v));
                 return msg;
             });
 //            rabbitTemplate.convertAndSend(this.exchange, this.routeKey,notify.toString());
         } catch (AmqpException e){
-            e.printStackTrace();
             log.warn("RabbitMQ Sender Throws Exception ===> {} ",e.getMessage());
             return false;
         }

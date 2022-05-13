@@ -6,12 +6,19 @@ import com.pie.dpc.filelistener.FileDirectoryMonitorService;
 import com.pie.dpc.notify.rabbitmq.RabbitMQNotifySender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 
 @SpringBootTest
+@SpringBootApplication
 class RabbitMQNotifySenderTest {
+
+    public static void main(String[] args) {
+        SpringApplication.run(RabbitMQNotifySenderTest.class,args);
+    }
 
     @Autowired
     RabbitMQNotifySender sender;
