@@ -21,15 +21,22 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
 
+    private static boolean initNotifyListenerStatus = false;
+
     private AfterFileNotify after;
     private int maskDir = JNotify_linux.IN_ISDIR | JNotify_linux.IN_MOVE | JNotify_linux.IN_CREATE |
             JNotify_linux.IN_DELETE | JNotify_linux.IN_IGNORED ;
     private int maskFile = JNotify_linux.IN_CLOSE_WRITE | JNotify_linux.IN_MOVE ;
     private int maskAll = maskDir | maskFile;
 
-    private ConcurrentHashMap<Integer,String> wdTree = new ConcurrentHashMap<>();
-
-    private ConcurrentHashMap<Integer,CollectionDataRecordObj> recordTreeMap = new ConcurrentHashMap<>();
+    /**
+     * 使用static 避免其他实例化bean 丢失
+     */
+    private static ConcurrentHashMap<Integer,String> wdTree = new ConcurrentHashMap<>();
+    /**
+     * 使用static 避免其他实例化bean 丢失
+     */
+    private static ConcurrentHashMap<Integer,CollectionDataRecordObj> recordTreeMap = new ConcurrentHashMap<>();
 
     public LinuxFileNotifyStrategyService (AfterFileNotify afterEvent){
         this.after = afterEvent;
@@ -47,6 +54,8 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
                 log.warn("error remove watch");
             }
         });
+        JNotify_linux.reload();
+
     }
 
     @Override
@@ -69,8 +78,14 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
                 //TODO 目录下文件变化监听
                 recordTreeMap.put(wdDIR,dataRecord);
             }
+            log.debug("init status {} ", initNotifyListenerStatus);
             //first listener
-            JNotify_linux.setNotifyListener(new LinuxNotifyListener());
+            if(initNotifyListenerStatus == false){
+
+                JNotify_linux.setNotifyListener(new LinuxNotifyListener());
+                initNotifyListenerStatus = true;
+            }
+
 
         } catch (JNotifyException e) {
             log.error("JNotify error ==> {}", e.getMessage());
@@ -92,7 +107,11 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
             log.debug("wdTree szie == {}",wdTree.size());
 
             //first listener
-            JNotify_linux.setNotifyListener(new LinuxNotifyListener());
+            if(initNotifyListenerStatus == false){
+                JNotify_linux.setNotifyListener(new LinuxNotifyListener());
+                initNotifyListenerStatus = true;
+            }
+
             Thread.sleep(Integer.MAX_VALUE);
         } catch (JNotifyException e) {
             log.error("JNotify error ==> {}",e.getMessage());
@@ -141,7 +160,7 @@ public class LinuxFileNotifyStrategyService implements FileNotifyStrategy {
             String fullName = wdTree.get(wd)+ File.separator + name;
             File subDir = new File(fullName);
             log.debug("notify : name = {} , wd = {} , mask = {} , cookie = {} ",
-                    fullName,wd,mask,cookie);
+                    fullName,wd,JNotify_linux.getMaskDesc(mask),cookie);
 
             if ((mask & maskFile) == mask) { //
                 //TODO 文件变化

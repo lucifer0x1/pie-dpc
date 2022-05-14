@@ -1,11 +1,9 @@
 
 ###
-# window virtual box
-GET http://localhost:52578/recv?dataCode=code1&dataDirectory=/root/data
 
 ###
 # window virtual box
-GET http://192.168.56.101:7777/recv?dataCode=code1&dataDirectory=/root/data
+GET http://192.168.56.101:7777/recv?dataCode=code2&dataDirectory=/root/data2
 
 ###
 # mac os docker

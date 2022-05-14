@@ -16,7 +16,7 @@ import java.util.Set;
 public class FileNotifyContext {
     Logger log = LoggerFactory.getLogger(FileNotifyStrategy.class);
     private FileNotifyStrategy notify;
-    public boolean STATUS = false;
+    public static boolean STATUS = false;
 
     public boolean isSTATUS() {
         return STATUS;
@@ -25,6 +25,7 @@ public class FileNotifyContext {
     public void stop(){
         if(STATUS){
             this.notify.cancel();
+            STATUS = false;
         }
         log.debug("{} --> notifyStrategy is stop",this.notify.findStrategyName() );
     }

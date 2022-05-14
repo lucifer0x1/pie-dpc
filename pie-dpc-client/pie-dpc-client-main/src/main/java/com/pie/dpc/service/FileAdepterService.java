@@ -54,14 +54,20 @@ public class FileAdepterService implements AfterFileNotify {
             isFind = matcher.find();
         }
         if(isFind){
-            //TODO 发送ftp和消息
-            if(ftpSender.uploadFile(recordObj.getDataCode(), file.getName(),file.getAbsolutePath())){
+            //TODO 发送ftp和消息 ，  根据监听子目录及子目录变化情况创建发送FTP服务端 子目录
+            //ftpFilePath = datacode  + ( file绝对路径 -  监控路径)
+            File monitor =  new File(recordObj.getDataDirectory());
+            String ftpFilePath = file.getAbsolutePath()
+                    .replaceAll(monitor.getAbsolutePath() , recordObj.getDataCode())
+                    .replaceAll(file.getName(),"");
+            log.debug("ftp file path is => [{}]" , ftpFilePath);
+            if(ftpSender.uploadFile(ftpFilePath, file.getName(),file.getAbsolutePath())){
                 log.debug("ftp upload OK!!! ");
                 MessageObj msg = new MessageObj();
                 msg.setClientId(config.getInstallParam().getClientID());
                 msg.setFilename(file.getName());
                 msg.setType(MessageType.FILE);
-                msg.setTargetPath(recordObj.getDataCode());
+                msg.setTargetPath(ftpFilePath);
                 mqSender.sendNotifyMessage(msg);
             };
         }

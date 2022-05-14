@@ -42,10 +42,10 @@ public class ConfigController {
                     cacheConfig.collectionDataRecordCache.remove(map.getKey());
                 });
         System.gc();
+
+        log.debug("cacheConfig length = {}",cacheConfig.collectionDataRecordCache.size());
+
         cacheConfig.addRecord(config);
-//        for (CollectionDataRecordObj recordObj : config) {
-//            cacheConfig.addRecord(recordObj);
-//        }
         monitorService.stop();
         monitorService.monitor(cacheConfig.getCollectionDataRecordObj());
         log.debug("monitor stop and restart");

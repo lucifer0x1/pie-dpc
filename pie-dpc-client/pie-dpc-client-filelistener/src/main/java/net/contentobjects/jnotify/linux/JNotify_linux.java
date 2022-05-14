@@ -27,6 +27,28 @@ public class JNotify_linux {
         init();
     }
 
+    private static Thread thread = new Thread();
+    private static void init()
+    {
+        thread = new Thread("INotify thread")
+        {
+            public void run()
+            {
+                nativeNotifyLoop();
+            }
+        };
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    public static void reload(){
+        if(thread.isAlive()){
+            nativeInit();
+        }
+
+    }
+
+
     /* the following are legal, implemented events that user-space can watch for */
     public final static int IN_ACCESS = 0x00000001; /* File was accessed */
     public final static int IN_MODIFY = 0x00000002; /* File was modified */
@@ -102,18 +124,7 @@ public class JNotify_linux {
         }
     }
 
-    private static void init()
-    {
-        Thread thread = new Thread("INotify thread")
-        {
-            public void run()
-            {
-                nativeNotifyLoop();
-            }
-        };
-        thread.setDaemon(true);
-        thread.start();
-    }
+
 
 
     static void callbackProcessEvent(String name, int wd, int mask, int cookie)
@@ -138,7 +149,7 @@ public class JNotify_linux {
         }
     }
 
-    private static String getMaskDesc(int linuxMask)
+    public static String getMaskDesc(int linuxMask)
     {
         boolean lIN_ACCESS = (linuxMask & net.contentobjects.jnotify.linux.JNotify_linux.IN_ACCESS) != 0;
         boolean lIN_MODIFY = (linuxMask & net.contentobjects.jnotify.linux.JNotify_linux.IN_MODIFY) != 0;

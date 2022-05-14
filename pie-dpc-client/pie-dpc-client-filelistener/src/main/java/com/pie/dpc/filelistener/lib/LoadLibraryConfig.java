@@ -65,6 +65,7 @@ public class LoadLibraryConfig {
             logger.debug("Loading.... Running on Linux => {} ",osName);
             String filePath = extractLibrary();
             if(filePath!=null){
+
                 System.load(filePath);
             }else{
                 logger.error("extractLibrary un success");

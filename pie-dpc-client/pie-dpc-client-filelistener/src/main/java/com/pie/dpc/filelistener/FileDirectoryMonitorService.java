@@ -15,7 +15,8 @@ public class FileDirectoryMonitorService {
     Logger log = LoggerFactory.getLogger(FileDirectoryMonitorService.class);
 
     private AfterFileNotify afterFileNotify;
-    private FileNotifyContext context;
+    // 统一用一个context 避免 其他 实例化bean的内容 监听事件丢失
+    private static FileNotifyContext context;
 
 
     public FileDirectoryMonitorService(AfterFileNotify afterFileNotify) {
@@ -52,7 +53,7 @@ public class FileDirectoryMonitorService {
             strategy = new LinuxFileNotifyStrategyService(afterFileNotify);
         }
 
-        FileNotifyContext context = new FileNotifyContext(strategy);
+        context = new FileNotifyContext(strategy);
         context.autoListener(path);
     }
 
