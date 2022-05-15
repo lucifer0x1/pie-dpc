@@ -19,7 +19,7 @@ public abstract class HeartBeatMonitor {
     /**
      * 发送心跳方法
      */
-    public abstract void sendHeartBeat();
+    public abstract RedisTemplate sendHeartBeat();
 
     /**
      * 接受心跳信息,监测是否发送成功
@@ -49,7 +49,11 @@ public abstract class HeartBeatMonitor {
         init(type);
     }
 
-    private void init(HeartBeatType type){
+    /**
+     * to init Executors
+     * @param type
+     */
+    protected void init(HeartBeatType type){
         switch (type) {
             case SENDER:
                 scheduledSender = Executors.newScheduledThreadPool(1, r -> {

@@ -17,6 +17,18 @@
     </properties>
 
     <dependencies>
+
+<!--        <dependency>-->
+<!--            <groupId>com.pie.dpc</groupId>-->
+<!--            <artifactId>pie-common</artifactId>-->
+<!--            <version>1.0-dev</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.pie.dpc</groupId>
+            <artifactId>pie-dpc-server-status</artifactId>
+            <version>1.0-dev</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

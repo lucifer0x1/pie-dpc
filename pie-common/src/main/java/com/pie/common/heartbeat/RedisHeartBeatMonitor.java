@@ -92,13 +92,14 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
      * @return
      */
     @Override
-    public void sendHeartBeat() {
+    public RedisTemplate sendHeartBeat() {
         HeartBeatMessageObj msg = new HeartBeatMessageObj();
         msg.setClientID(CLIENT_ID);
         msg.setIpAddress(AGENT_LOCAL_ADDRESS);
         String key =  REDIS_KEY_PROFIX + ":" + msg.getIpAddress() + ":heartbeat";
         redisTemplate.opsForValue().set(key,msg.toString(),TIME_OUT_SECONDS, TimeUnit.SECONDS);
         log.debug(msg.toString());
+        return redisTemplate;
     }
 
 
@@ -118,4 +119,5 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
         }
 
     }
+
 }
