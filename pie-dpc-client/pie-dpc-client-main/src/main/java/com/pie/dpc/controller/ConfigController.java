@@ -79,7 +79,7 @@ public class ConfigController {
     @PostConstruct
     public void startHeartBeat(){
         /** TODO  启动心跳 ， 如果引入starter web 则交给Bean实现 **/
-        heartBeatMonitor.autoStart();
+        heartBeatMonitor.autoStartSender();
     }
 
     @RequestMapping(value = "/install",method = RequestMethod.GET)

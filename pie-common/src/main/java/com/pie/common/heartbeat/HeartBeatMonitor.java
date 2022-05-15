@@ -19,40 +19,124 @@ public abstract class HeartBeatMonitor {
     /**
      * 发送心跳方法
      */
-    public abstract RedisTemplate sendHeartBeat();
+    public abstract void sendHeartBeat();
 
     /**
      * 接受心跳信息,监测是否发送成功
      */
     public  abstract void recvHeartBeatCheck();
-    public   final   ScheduledExecutorService scheduledExecutorService;
 
-    public HeartBeatMonitor() {
 
-        scheduledExecutorService = Executors.newScheduledThreadPool(1,new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread thread = new Thread(r,"heatbeat sender monitor threadPool");
-                thread.setDaemon(true);
-                return thread;
-            }
-        });
+    private ScheduledExecutorService scheduledSender;
+
+    private ScheduledExecutorService scheduledReceiver;
+
+
+    /**
+     * @see HeartBeatType
+     * @param type
+     * @return
+     */
+    public static HeartBeatType build(String type){
+        return HeartBeatType.valueOf(type);
     }
+
+    public HeartBeatMonitor(){
+        init(HeartBeatType.BOTH);
+    }
+
+    public HeartBeatMonitor(HeartBeatType type) {
+        init(type);
+    }
+
+    private void init(HeartBeatType type){
+        switch (type) {
+            case SENDER:
+                scheduledSender = Executors.newScheduledThreadPool(1, r -> {
+                    Thread thread = new Thread(r,"heatbeat sender monitor threadPool");
+                    thread.setDaemon(true);
+                    return thread;
+                });
+
+                break;
+            case RECEIVER:
+                scheduledReceiver = Executors.newScheduledThreadPool(1,r -> {
+                    Thread thread = new Thread(r,"heatbeat receiver monitor threadPool");
+                    thread.setDaemon(true);
+                    return thread;
+                });
+                break;
+            case BOTH:
+            default:
+                scheduledSender = Executors.newScheduledThreadPool(1, r -> {
+                    Thread thread = new Thread(r,"heatbeat sender monitor threadPool");
+                    thread.setDaemon(true);
+                    return thread;
+                });
+                scheduledReceiver = Executors.newScheduledThreadPool(1,r -> {
+                    Thread thread = new Thread(r,"heatbeat receiver monitor threadPool");
+                    thread.setDaemon(true);
+                    return thread;
+                });
+                break;
+        }
+    }
+
+
 
     /**
      * 启动发送心跳线程
+     * @param TIME_STEP_SECONDS 心跳发送间隔
      */
-    public void start(long TIME_STEP_SECONDS){
-        log.info("Heartbeat Monitor Starting...");
-        scheduledExecutorService.scheduleAtFixedRate(new SenderHeartBeatThread(this),
+    public void startSend(long TIME_STEP_SECONDS){
+        log.info("Heartbeat Monitor[{}] Starting...","SEND");
+        scheduledSender.scheduleAtFixedRate(new SenderHeartBeatThread(this),
         1, TIME_STEP_SECONDS, TimeUnit.SECONDS);
 
     }
 
     /**
+     * 心跳发送
+     * @param TIME_STEP_SECONDS
+     */
+    public void startCheck(long TIME_STEP_SECONDS){
+        log.info("Heart beat Monitor[{}] Starting...","RECV");
+        scheduledReceiver.scheduleAtFixedRate(new ReceiverHeartBeatThread(this),
+                1, TIME_STEP_SECONDS, TimeUnit.SECONDS);
+    }
+
+
+
+    /**
+     * 心跳检测
+     */
+    public class ReceiverHeartBeatThread implements  Runnable {
+
+        private HeartBeatMonitor heartBeatMonitor = null;
+
+        public ReceiverHeartBeatThread(HeartBeatMonitor heartBeatMonitor){
+            this.heartBeatMonitor = heartBeatMonitor;
+        }
+
+        @Override
+        public void run() {
+            log.debug("Receiver Check HeartBearMessage");
+            RedisTemplate t = null;
+            try {
+                recvHeartBeatCheck();
+            } catch (Exception e){
+                log.error("heart beat monitor has  problem {} ,RedisTemplate connection => [{}]" ,
+                        e.getMessage() ,t.getClientList().size());
+            }
+
+            log.debug("receive check  HeartBearMessage complete");
+        }
+    }
+
+    /**
      *  发送心跳线程
      */
-   public class SenderHeartBeatThread implements Runnable {
+    public class SenderHeartBeatThread implements Runnable {
 
         private HeartBeatMonitor heartBeatMonitor = null;
 
@@ -65,8 +149,7 @@ public abstract class HeartBeatMonitor {
             log.debug("Sending HeartBearMessage");
             RedisTemplate t = null;
             try {
-                t  = sendHeartBeat();
-                recvHeartBeatCheck();
+                sendHeartBeat();
             } catch (Exception e){
                 log.error("heart beat monitor has  problem {} ,RedisTemplate connection => [{}]" ,
                          e.getMessage() ,t.getClientList().size());
@@ -76,4 +159,16 @@ public abstract class HeartBeatMonitor {
         }
     }
 
+}
+
+enum HeartBeatType {
+    SENDER("this is used by heartbeat sender "),
+    RECEIVER("this is used by receive heartbeat to check"),
+    BOTH("sender and receiver all running");
+
+    private String description =null;
+
+    HeartBeatType(String desc) {
+        description = desc;
+    }
 }

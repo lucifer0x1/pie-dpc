@@ -17,7 +17,7 @@ class RedisHeartBeatMonitorTest {
 
     @Test
     public void testHearBeat(){
-        monitor.autoStart();
+        monitor.autoStartSender();
         try {
             Thread.sleep(Integer.MAX_VALUE);
         } catch (InterruptedException e) {

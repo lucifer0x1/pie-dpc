@@ -4,11 +4,12 @@ package com.pie.common.heartbeat;
 import com.pie.common.collection.CollectionMessageObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,6 +55,8 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    private ReceiverHeartBeartCheckNotify notify;
+
     /**
      * 用于安装使用
      * @param obj
@@ -63,7 +66,7 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
     }
 
 //    @PostConstruct
-    public void autoStart(){
+    public void autoStartSender(){
         log.info("\n AGENT_LOCAL_ADDRESS = {} \n " +
                 "TIME_STEP_SECONDS = {} \n " +
                 "TIME_OUT_SECONDS ={} \n " +
@@ -73,7 +76,13 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
                 TIME_OUT_SECONDS,
                 REDIS_KEY_PROFIX);
 
-        start(TIME_STEP_SECONDS);
+        startSend(TIME_STEP_SECONDS);
+    }
+
+//    @PostConstruct
+    public void autoStartReceiver(ReceiverHeartBeartCheckNotify notify){
+        this.notify = notify;
+        startCheck(TIME_STEP_SECONDS);
     }
 
 
@@ -83,18 +92,30 @@ public class RedisHeartBeatMonitor extends HeartBeatMonitor {
      * @return
      */
     @Override
-    public RedisTemplate sendHeartBeat() {
+    public void sendHeartBeat() {
         HeartBeatMessageObj msg = new HeartBeatMessageObj();
         msg.setClientID(CLIENT_ID);
         msg.setIpAddress(AGENT_LOCAL_ADDRESS);
         String key =  REDIS_KEY_PROFIX + ":" + msg.getIpAddress() + ":heartbeat";
         redisTemplate.opsForValue().set(key,msg.toString(),TIME_OUT_SECONDS, TimeUnit.SECONDS);
         log.debug(msg.toString());
-        return redisTemplate;
     }
 
 
     @Override
     public void recvHeartBeatCheck() {
+        String keyPattern =  REDIS_KEY_PROFIX + ":*:heartbeat";
+        Set<String> keys = redisTemplate.keys(keyPattern);
+        List<String> heartbeat ;
+        if(keys.size()>0){
+             heartbeat = redisTemplate.opsForValue().multiGet(keys);
+             this.notify.checkHeartBeat(heartbeat);
+//             heartbeat.stream().parallel().forEach(v ->{
+//                 this.notify.checkHeartBeat(new HeartBeatMessageObj(v));
+//             });
+        }else{
+            log.warn("check no keys use => [{}]",keyPattern);
+        }
+
     }
 }
