@@ -1,5 +1,7 @@
 package com.pie.common.config;
 
+import java.io.File;
+
 /**
  * @Author wangxiyue.xy@163.com
  * @Date 2022/5/11 15:43
@@ -18,5 +20,25 @@ public class LOCAL_CONSTANTS_CONFIG {
      * SSHD 连接超时时间 5秒
      */
     public static final long SSHD_NETWORK_CONNECTED_TIME_OUT_SECONDS = 5;
+
+    // 1024 * 1024 * 20= 20mb
+    public static final int BYTE_BUFFER_LENGTH = 1024 * 1024 * 20;
+
+    /**
+     * agent 安装目录目标目录
+     *
+     * */
+    public static final String AGENT_INSTALL_APP_NAME= "pie-dpc-client-main-1.0-dev.jar";
+
+    public static final String AGENT_INSTALL_ENVIRONMENT_NAME= "jdk.gz.tar";
+
+    /**
+     * agent 安装包原始路径
+     *
+     * */
+    public static final String AGENT_INSTALL_APP_FULL_PATH = "config" + File.separator + AGENT_INSTALL_APP_NAME;
+
+    public static final String AGENT_INSTALL_ENVIRONMENT_FULL_PATH = "config" + File.separator +AGENT_INSTALL_ENVIRONMENT_NAME;
+
 
 }

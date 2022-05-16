@@ -21,7 +21,7 @@ class ConnectSSHServerCheckTest {
     void connect() {
 
         System.out.println(connectSSHServerCheck.connect("root",
-                "lucy", "192.168.56.101", 22));
+                "lucy1", "192.168.56.101", 22));
         System.out.println(connectSSHServerCheck.executeCommand("ifconfig"));
 
     }

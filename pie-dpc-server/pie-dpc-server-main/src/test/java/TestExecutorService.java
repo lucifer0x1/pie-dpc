@@ -39,7 +39,7 @@ public class TestExecutorService {
                 public void run() {
                     int n = 1;
                     int ttttt = 0;
-                    while (true){
+//                    while (true){
 
                         if(ttttt >1000){
                             try {
@@ -55,8 +55,7 @@ public class TestExecutorService {
                         t.set(n);
                         map.get("default").execute(t::p);
                         n++;
-
-                    }
+//                    }
                 }
             }).start();
         }
@@ -100,7 +99,7 @@ public class TestExecutorService {
 
     public void  in(){
         long c = 0;
-        while (true){
+//        while (true){
             System.out.println("this is in");
             lock.lock();
             try {
@@ -115,12 +114,12 @@ public class TestExecutorService {
             }
             c++;
             System.out.println("in ========> " +c);
-        }
+//        }
     }
 
     public void out(){
         long c = 0;
-        while (true){
+//        while (true){
             System.out.println("out this is out");
             lock.lock();
             try {
@@ -137,24 +136,19 @@ public class TestExecutorService {
 
             c++;
             System.out.println("out =====> " + c);
-        }
-
-
-
+//        }
     }
 
 
 
     public void testRun(){
-        while (true){
+//        while (true){
             System.out.println("this is function");
             try {
                 throw  new Exception("abc");
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
-        }
-
-
+//        }
     }
 }

@@ -26,7 +26,6 @@ public class HeartBeatCheck implements ReceiverHeartBeartCheckNotify {
     @Autowired
     RedisHeartBeatMonitor heartBeatMonitor;
 
-
     @PostConstruct
     public void  startHeartBeatCheck(){
         heartBeatMonitor.autoStartReceiver(this::checkHeartBeat);

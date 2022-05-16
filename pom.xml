@@ -33,7 +33,7 @@
         <fastjson.version>1.2.75</fastjson.version>
         <swagger.version>2.9.2</swagger.version>
         <apache-ftp-server.version>1.2.0</apache-ftp-server.version>
-        <apache-sshd-core.version>2.8.0</apache-sshd-core.version>
+        <apache-sshd.version>2.8.0</apache-sshd.version>
     </properties>
 
     <developers>
@@ -64,7 +64,13 @@
             <dependency>
                 <groupId>org.apache.sshd</groupId>
                 <artifactId>sshd-core</artifactId>
-                <version>${apache-sshd-core.version}</version>
+                <version>${apache-sshd.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.sshd</groupId>
+                <artifactId>sshd-sftp</artifactId>
+                <version>${apache-sshd.version}</version>
             </dependency>
 
             <dependency>
