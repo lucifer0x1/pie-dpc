@@ -30,15 +30,16 @@ public class LOCAL_CONSTANTS_CONFIG {
      * */
     public static final String AGENT_INSTALL_APP_NAME= "pie-dpc-client-main-1.0-dev.jar";
 
-    public static final String AGENT_INSTALL_ENVIRONMENT_NAME= "jdk.gz.tar";
+    public static final String AGENT_INSTALL_ENVIRONMENT_NAME= "jdk1.8.0_321.tar.gz";
+    public static final String AGENT_INSTALL_ENVIRONMENT_SUBDIR= "/"+ "jdk1.8.0_321/bin" +"/";
 
     /**
      * agent 安装包原始路径
      *
      * */
-    public static final String AGENT_INSTALL_APP_FULL_PATH = "config" + File.separator + AGENT_INSTALL_APP_NAME;
+    public static final String AGENT_INSTALL_APP_FULL_PATH = "config" +"/" + AGENT_INSTALL_APP_NAME;
 
-    public static final String AGENT_INSTALL_ENVIRONMENT_FULL_PATH = "config" + File.separator +AGENT_INSTALL_ENVIRONMENT_NAME;
+    public static final String AGENT_INSTALL_ENVIRONMENT_FULL_PATH = "config" + "/" +AGENT_INSTALL_ENVIRONMENT_NAME;
 
 
 }

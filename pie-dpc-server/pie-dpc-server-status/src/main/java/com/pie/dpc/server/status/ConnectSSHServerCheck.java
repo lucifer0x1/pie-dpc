@@ -1,6 +1,8 @@
 package com.pie.dpc.server.status;
 
 import org.apache.sshd.client.SshClient;
+import org.apache.sshd.client.channel.ChannelExec;
+import org.apache.sshd.client.channel.ChannelShell;
 import org.apache.sshd.client.channel.ClientChannel;
 import org.apache.sshd.client.future.AuthFuture;
 import org.apache.sshd.client.future.ConnectFuture;
@@ -80,22 +82,35 @@ public class ConnectSSHServerCheck {
         return false;
     }
 
-    public boolean remoteCopy(InputStream fis, String dstFileFullPath){
+    public boolean remoteCopy(InputStream fis, String path,String  fileName){
+        if(fis==null){
+            log.warn("InputStream is null");
+            return false;
+        }
+
         if(connectedState()){
             try {
-                SftpClient.CloseableHandle handle = sftpClient.open(dstFileFullPath,
+                try {
+                    sftpClient.mkdir(path);
+                } catch (IOException e){
+                    log.warn("mkdir [{}] => [{}]",path,e.getMessage());
+                }
+
+                SftpClient.CloseableHandle handle = sftpClient.open(path + "/" + fileName,
                         EnumSet.of(SftpClient.OpenMode.Write, SftpClient.OpenMode.Create));
                 byte[] buff = new byte[BYTE_BUFFER_LENGTH];
                 int readLength  = fis.read(buff);
                 long fileOffset = 0l;
 
+                //TODO 目录跳转
+
                 while (readLength!=-1){
                     sftpClient.write(handle,fileOffset,buff,0,readLength);
-                    fileOffset++;
+                    fileOffset = fileOffset + readLength;
                     readLength = fis.read(buff);
                 }
 
-                log.debug("InputStream upload to [{}] success upload size = {}",dstFileFullPath,fileOffset);
+                log.debug("InputStream upload to [{}] success upload size = {}",fileName,fileOffset);
                 return true;
 
             } catch (IOException e) {
@@ -121,7 +136,7 @@ public class ConnectSSHServerCheck {
 
                     while (readLength!=-1){
                         sftpClient.write(handle,fileOffset,buff,0,readLength);
-                        fileOffset++;
+                        fileOffset = fileOffset + readLength;
                         readLength = fis.read(buff);
                     }
 
@@ -151,7 +166,9 @@ public class ConnectSSHServerCheck {
         String res = "";
         if(connectedState()){
             try {
+                log.info("command => {}",command);
                 res = clientSession.executeRemoteCommand(command,stderr, StandardCharsets.UTF_8);
+                log.debug("result : {}",res);
             } catch (IOException e) {
                 log.warn("executeRemoteCommand error => {}",e.getMessage());
             } finally {
@@ -159,6 +176,7 @@ public class ConnectSSHServerCheck {
                 String err =  new String(outBytes, StandardCharsets.UTF_8);
                 if(err!=null &&err.length() > 0){
                     log.warn("remote error {}",err);
+                    return err;
                 }
             }
         } else {
@@ -188,7 +206,6 @@ public class ConnectSSHServerCheck {
             if(!connectFuture.isConnected()){
                 return false;
             }
-
             clientSession = connectFuture.getSession();
             clientSession.addPasswordIdentity(password);
             AuthFuture verify = clientSession.auth().verify(SSHD_NETWORK_CONNECTED_TIME_OUT_SECONDS, TimeUnit.SECONDS);
