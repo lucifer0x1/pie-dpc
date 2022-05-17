@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <description>
-        客户端状态监测
-        转接远程地址检测
-        安装位置信息检测
+        客户端状态监测 - ok
+        链接远程地址检测 - ok
+        安装位置信息检测 - ok
     </description>
 
     <artifactId>pie-dpc-server-status</artifactId>

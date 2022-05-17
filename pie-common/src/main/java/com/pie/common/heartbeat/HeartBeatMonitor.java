@@ -100,7 +100,7 @@ public abstract class HeartBeatMonitor {
     }
 
     /**
-     * 心跳发送
+     * 接收心跳
      * @param TIME_STEP_SECONDS
      */
     public void startCheck(long TIME_STEP_SECONDS){

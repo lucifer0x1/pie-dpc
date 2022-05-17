@@ -6,6 +6,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @Author wangxiyue.xy@163.com
@@ -14,6 +16,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  **/
 @SpringBootApplication
+@ComponentScan({"com.pie.dpc.server.web","com.pie.dpc.server"})
+@EnableSwagger2
 public class PieServerAgent implements ApplicationRunner {
 
     public static void main(String[] args) {
