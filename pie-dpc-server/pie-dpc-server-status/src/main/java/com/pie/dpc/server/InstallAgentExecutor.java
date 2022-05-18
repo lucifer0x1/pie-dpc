@@ -35,7 +35,7 @@ public class InstallAgentExecutor {
 
     public ConnectSSHServerCheck getConnect(){
         if(connect==null){
-            log.warn("ConnectSSHServerCheck is null");
+            log.error("ConnectSSHServerCheck is null");
         }
         return connect;
     }
@@ -45,14 +45,14 @@ public class InstallAgentExecutor {
         String targetJar = LOCAL_CONSTANTS_CONFIG.AGENT_INSTALL_APP_NAME;
         String targetENV = LOCAL_CONSTANTS_CONFIG.AGENT_INSTALL_ENVIRONMENT_NAME;
         StringBuilder jarInstallStart = new StringBuilder("nohup");
-        String testJdkVersion = "java -version";
+        String testJdkVersion = "which java";
 
         /**
          * install jdk
          * 如果没有监测到 java 1.8则安装
          * */
-        if(!connect.executeCommand(testJdkVersion).contains("java version \"1.8")){
-            if(!connect.executeCommand(path + AGENT_INSTALL_ENVIRONMENT_SUBDIR + testJdkVersion).contains("java version \"1.8")){
+        if(!connect.executeCommand(testJdkVersion).contains("java")){
+            if(!connect.executeCommand(path + AGENT_INSTALL_ENVIRONMENT_SUBDIR + testJdkVersion).contains("java")){
                 // 默认安装位置不存在
                 InputStream jdkInputStream = InstallAgentExecutor.class.getClassLoader()
                         .getResourceAsStream(AGENT_INSTALL_ENVIRONMENT_FULL_PATH);
@@ -69,7 +69,7 @@ public class InstallAgentExecutor {
                 jarInstallStart.append(" ").append(path).append(AGENT_INSTALL_ENVIRONMENT_SUBDIR);
             }
         }else {
-            log.info("find jdk on default []",getConnect().executeCommand("whereis java") );
+            log.info("find jdk on default []",getConnect().executeCommand("which java") );
             jarInstallStart.append(" ");
         }
 
@@ -81,6 +81,7 @@ public class InstallAgentExecutor {
                 .getResourceAsStream(AGENT_INSTALL_APP_FULL_PATH);
         if (connect.remoteCopy(jarInputStream,path,targetJar)) {
             jarInstallStart.append("java -jar ").append(path).append("/").append(targetJar)
+                    .append(" ").append("")  // TODO 配置启动参数 动态指定服务端IP地址
                     .append(" > ").append(path).append("/").append("agent.log")
                     .append(" 2>&1  &");
             log.info(connect.executeCommand(jarInstallStart.toString()));

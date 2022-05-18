@@ -3,6 +3,8 @@ package com.pie.dpc.server.status;
 import com.pie.common.heartbeat.HeartBeatMessageObj;
 import com.pie.common.heartbeat.ReceiverHeartBeartCheckNotify;
 import com.pie.common.heartbeat.RedisHeartBeatMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
@@ -24,6 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @DependsOn("redisHeartBeatMonitor")
 public class HeartBeatCheck implements ReceiverHeartBeartCheckNotify {
 
+    Logger log = LoggerFactory.getLogger(HeartBeatCheck.class);
+
     public final static ConcurrentHashMap<String, HeartBeatMessageObj> cache = new ConcurrentHashMap<>();
 
     @Autowired
@@ -31,11 +35,13 @@ public class HeartBeatCheck implements ReceiverHeartBeartCheckNotify {
 
     @PostConstruct
     public void  startHeartBeatCheck(){
+        log.debug("init recv Heartbeat");
         heartBeatMonitor.autoStartReceiver(this::checkHeartBeat);
     }
 
     @Override
     public void checkHeartBeat(List<String> heartBeatMessageObjToString) {
+        log.debug("heartbeat comming...");
         for (String heartBeat : heartBeatMessageObjToString) {
             HeartBeatMessageObj msg = new HeartBeatMessageObj(heartBeat);
             cache.put(msg.getIpAddress(),msg);

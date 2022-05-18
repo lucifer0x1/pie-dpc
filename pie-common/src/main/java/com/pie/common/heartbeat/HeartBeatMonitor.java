@@ -1,13 +1,11 @@
 package com.pie.common.heartbeat;
 
+import com.pie.common.config.LOCAL_CONSTANTS_CONFIG;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  *  心跳接口
@@ -56,6 +54,7 @@ public abstract class HeartBeatMonitor {
     protected void init(HeartBeatType type){
         switch (type) {
             case SENDER:
+
                 scheduledSender = Executors.newScheduledThreadPool(1, r -> {
                     Thread thread = new Thread(r,"heatbeat sender monitor threadPool");
                     thread.setDaemon(true);
@@ -105,6 +104,7 @@ public abstract class HeartBeatMonitor {
      */
     public void startCheck(long TIME_STEP_SECONDS){
         log.info("Heart beat Monitor[{}] Starting...","RECV");
+
         scheduledReceiver.scheduleAtFixedRate(new ReceiverHeartBeatThread(this),
                 1, TIME_STEP_SECONDS, TimeUnit.SECONDS);
     }
@@ -117,10 +117,14 @@ public abstract class HeartBeatMonitor {
     public class ReceiverHeartBeatThread implements  Runnable {
 
         private HeartBeatMonitor heartBeatMonitor = null;
+        private CountDownLatch latch= null;
 
         public ReceiverHeartBeatThread(HeartBeatMonitor heartBeatMonitor){
             this.heartBeatMonitor = heartBeatMonitor;
+            this.latch =  new CountDownLatch(1);
         }
+
+
 
         @Override
         public void run() {

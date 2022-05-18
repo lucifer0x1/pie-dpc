@@ -83,16 +83,17 @@ public class HeartBeatMessageObj {
     }
 
     public HeartBeatMessageObj(String toString){
+        System.out.println("toString:"+toString + ":end");
         JSONObject jsonObject = JSON.parseObject(toString);
         try {
-            this.setSendTime(sdf_yyyyMMddHHmmss.parse(String.valueOf( jsonObject.get("sendTime"))));
-            this.setIpAddress(String.valueOf(jsonObject.get("ipAddress")));
-            this.setClientID(String.valueOf(jsonObject.get("clientID")));
+            setSendTime(sdf_yyyyMMddHHmmss.parse(String.valueOf( jsonObject.get("sendTime"))));
+            setIpAddress(String.valueOf(jsonObject.get("ipAddress")));
+            setClientID(String.valueOf(jsonObject.get("clientID")));
             //TODO 此处数组转换 String 2 arrays 存在性能问题
 //            this.setListenerDir(String.valueOf(jsonObject.get("listenerDir")));
 //            this.setListenerRegex(String.valueOf(jsonObject.get("listenerRegex")));
         } catch (ParseException e) {
-            System.err.println("String to Date : JNON object =>" + jsonObject.get("sendTime").toString());
+            System.out.println("String to Date : JNON object =>" + jsonObject.get("sendTime").toString());
         }
     }
 
@@ -108,11 +109,11 @@ public class HeartBeatMessageObj {
     public String toString() {
 
         return "\n{" +
-                " sendTime:" + getSendTime() +
-                ", ipAddress:'" + ipAddress + '\'' +
-                ", clientID:'" + clientID + '\'' +
-                ", listenerDir:" + Arrays.toString(listenerDir) + '\'' +
-                ", listenerRegex:" + Arrays.toString(listenerRegex) + '\'' +
+                " \"sendTime\":\"" + getSendTime() + "\"" +
+                ", \"ipAddress\":\"" + ipAddress + "\"" +
+                ", \"clientID\":\"" + clientID + "\"" +
+                ", \"listenerDir\":\"" + Arrays.toString(listenerDir) + "\"" +
+                ", \"listenerRegex\":\"" + Arrays.toString(listenerRegex) + "\"" +
                 '}';
     }
 }

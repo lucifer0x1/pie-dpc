@@ -8,3 +8,12 @@ GET http://192.168.56.101:7777/recv?dataCode=code2&dataDirectory=/root/data2
 ###
 # mac os docker
 GET http://localhost:53439/recv?dataCode=code1&dataDirectory=/opt
+
+
+###
+# window server install
+GET http://localhost:8888/agent/install?host=127.0.0.1&user=root&password=root&port=2222&path=/opt
+
+###
+# windows server online
+GET http://localhost:8888/agent/online
