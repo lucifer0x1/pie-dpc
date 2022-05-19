@@ -3,6 +3,9 @@ package com.pie.dpc.server.web.controller;
 import com.pie.common.heartbeat.HeartBeatMessageObj;
 import com.pie.dpc.server.InstallAgentExecutor;
 import com.pie.dpc.server.status.HeartBeatCheck;
+import com.pie.dpc.server.web.ResultOK;
+import com.pie.dpc.server.web.dao.ServerAgentConfigDao;
+import com.pie.dpc.server.web.entity.ServerAgentConfigEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.Column;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +35,9 @@ public class AgentController {
 
     @Autowired
     private InstallAgentExecutor installAgentExecutor;
+
+    @Autowired
+    private ServerAgentConfigDao serverAgentConfigDao;
 
     @RequestMapping(value = "/online",method = RequestMethod.GET)
     @ApiOperation("查看客户端在线状态")
@@ -54,22 +61,21 @@ public class AgentController {
                                  @ApiParam (value = "安装Agent时登录使用的密码",required = true)String password ,
                                  @ApiParam (value = "安装目标服务器登录端口",required = true)Integer port ,
                                  @ApiParam (value = "安装Agent软件路径",required =true)String path){
-        if(host==null || host.length() ==0){
-            return ResultOK.fail().setData("param error [host]");
-        }
-        if(user==null || user.length() ==0){
-            return ResultOK.fail().setData("param error [user]");
-        }
-        if(password==null || password.length() <=0){
-            return ResultOK.fail().setData("param error [password]");
-        }
-        if(path==null || path.length() ==0){
-            return ResultOK.fail().setData("param error [path]");
-        }
-        if(port==null || port.intValue()<1){
-            return ResultOK.fail().setData("param error [port]");
-        }
+        if(host==null || host.length() ==0){ return ResultOK.fail().setData("param error [host]"); }
+        if(user==null || user.length() ==0){ return ResultOK.fail().setData("param error [user]"); }
+        if(password==null || password.length() <=0){ return ResultOK.fail().setData("param error [password]"); }
+        if(path==null || path.length() ==0){ return ResultOK.fail().setData("param error [path]"); }
+        if(port==null || port.intValue()<1){ return ResultOK.fail().setData("param error [port]"); }
 
+
+        //TODO 保存到数据库
+        ServerAgentConfigEntity entity = new ServerAgentConfigEntity();
+        entity.setHost(host);
+        entity.setPassword(password);
+        entity.setUsername(user);
+        entity.setPort(port);
+        entity.setInstallPath(path);
+        serverAgentConfigDao.save(entity);
 
         if(installAgentExecutor.getConnect().connect(user,password,host,port.intValue())){
             if(installAgentExecutor.install(path)){
@@ -77,5 +83,17 @@ public class AgentController {
             }
         }
         return ResultOK.fail();
+    }
+
+    @RequestMapping(value = "/save",method = RequestMethod.GET)
+    @ApiOperation("保存客户端目标服务器配置信息")
+    public ResultOK saveAgent(String host,
+                              String username,
+                              String password,Integer port,
+                              String installPath){
+
+
+
+        return ResultOK.ok().setReturnCode(0).setData("保存成功");
     }
 }

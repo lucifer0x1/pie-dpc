@@ -1,4 +1,4 @@
-package com.pie.dpc.server.web.controller;
+package com.pie.dpc.server.web;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

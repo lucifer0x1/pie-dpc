@@ -45,6 +45,8 @@ public class CacheCollectionConfig {
             System.gc();
         }
         installParam = obj;
+        saveInstallOnDisk();
+
     }
 
     public CollectionMessageObj getInstallParam(){
@@ -67,6 +69,7 @@ public class CacheCollectionConfig {
 
     public void addRecord(CollectionDataRecordObj dataRecordObj) {
         collectionDataRecordCache.put(dataRecordObj.getDataCode(),dataRecordObj);
+        saveOnDisk();
     }
 
     public CollectionDataRecordObj getRecordByDataCode(String dataCode){
@@ -122,6 +125,29 @@ public class CacheCollectionConfig {
             log.debug("load on  success  size ==> [{}]",properties.size());
         } catch (IOException e) {
             log.error("Collection DataRecord Cache Load properties ==> {}",e.getMessage());
+        }
+    }
+
+    synchronized
+    public void saveInstallOnDisk(){
+//        installParam
+        Properties properties  =new Properties();
+        try {
+            synchronized (installParam){
+                properties.put("install.clientID",installParam.getClientID());
+                properties.put("install.clientIpAddress",installParam.getClientIpAddress());
+                properties.put("install.recvIpAddress",installParam.getRecvIpAddress());
+                properties.put("install.recvPort",installParam.getRecvPort());
+                //TODO 系统默认优先加载 jar包目录下的 config/install.properties
+                String configFilePath  =this.getClass().getClassLoader().getResource("install.properties").getPath();
+                OutputStream out = new FileOutputStream(configFilePath);
+                properties.store(out,"install param [install.properties]");
+                log.debug("install save on disk success ==> [{}]",configFilePath);
+            }
+        } catch (IOException e) {
+            log.error("install param Cache save properties ==> {}",e.getMessage());
+        } catch (NullPointerException e){
+            log.error("synchronized check installParam  is null [{}]" ,e.getLocalizedMessage());
         }
     }
 

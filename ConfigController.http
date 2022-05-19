@@ -7,7 +7,7 @@ GET http://192.168.56.101:7777/recv?dataCode=code2&dataDirectory=/root/data2
 
 ###
 # mac os docker
-GET http://localhost:53439/recv?dataCode=code1&dataDirectory=/opt
+GET http://localhost:64390/recv?dataCode=code1&dataDirectory=/opt
 
 
 ###

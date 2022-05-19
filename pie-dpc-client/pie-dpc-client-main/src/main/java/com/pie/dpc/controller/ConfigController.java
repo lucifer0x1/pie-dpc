@@ -5,6 +5,7 @@ import com.pie.common.collection.CollectionMessageObj;
 import com.pie.common.heartbeat.RedisHeartBeatMonitor;
 import com.pie.dpc.config.CacheCollectionConfig;
 import com.pie.dpc.filelistener.FileDirectoryMonitorService;
+import com.pie.dpc.service.AgentClientFtpProcessor;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -82,13 +83,18 @@ public class ConfigController {
         heartBeatMonitor.autoStartSender();
     }
 
+    @Autowired
+    AgentClientFtpProcessor processor;
+
     @RequestMapping(value = "/install",method = RequestMethod.GET)
-    @ApiOperation("客户端安装初始化服务端配置参数")
+    @ApiOperation("客户端安装初始化服务端配置参数 ，后重启")
     public ResultOK installClient(CollectionMessageObj obj){
-        System.out.println(obj.toString());
+        log.info("install client {}",obj.toString());
         cacheConfig.addInitCache(obj);
+        processor.restartLoadFtpPool(obj.getRecvIpAddress(),obj.getRecvPort());
         heartBeatMonitor.install(obj);
         return ResultOK.ok().setReturnCode(0).setData(obj);
     }
+
 
 }

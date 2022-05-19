@@ -18,7 +18,7 @@ public class FtpProperties {
     private String ftpUserPassword;
     private Integer initialSize = 0;
     private String  encoding = "UTF-8";
-    private Integer bufferSize = 4096;
+    private Integer bufferSize = 40960;
     private Integer retryCount = 3;
 
     public String getFtpIp() {

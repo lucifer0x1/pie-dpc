@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * @Author wangxiyue.xy@163.com
@@ -13,7 +14,7 @@ import java.io.File;
  * 数据目录、采集策略配置记录（一个目录对应一条正则表达式）
  *
  **/
-public class CollectionDataRecordObj {
+public class CollectionDataRecordObj implements Serializable {
 
 
     /**
