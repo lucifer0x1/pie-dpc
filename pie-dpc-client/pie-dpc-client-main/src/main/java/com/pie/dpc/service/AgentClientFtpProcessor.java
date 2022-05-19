@@ -35,7 +35,7 @@ public class AgentClientFtpProcessor {
     private FtpProperties ftpProperties;
 
     private ObjectPool<FTPClient> pool;
-    private DefaultFtpProcessor processor;
+    private DefaultFtpProcessor ftpProcessor;
 
     public void restartLoadFtpPool(String ip,String port){
         ftpProperties.setFtpIp(ip);
@@ -49,12 +49,14 @@ public class AgentClientFtpProcessor {
         poolConfig.setSoftMinEvictableIdleTimeMillis(50000);
         poolConfig.setTimeBetweenEvictionRunsMillis(30000);
 
-        processor.setHasInit(false);
+
+        log.debug("ftp  : user = {} , pwd = {}",ftpProperties.getFtpUserName(),ftpProperties.getFtpUserPassword());
+
+        ftpProcessor.setHasInit(false);
         pool = new GenericObjectPool<>(new FtpClientPooledObjectFactory(ftpProperties), poolConfig);
         preLoadingFtpClient(ftpProperties.getInitialSize(), poolConfig.getMaxIdle());
-        DefaultFtpProcessor processor = new DefaultFtpProcessor(ftpProperties);
-        processor.setFtpClientPool(pool);
-        processor.setHasInit(true);
+        ftpProcessor.setFtpClientPool(pool);
+        ftpProcessor.setHasInit(true);
     }
 
     @Bean
@@ -72,7 +74,7 @@ public class AgentClientFtpProcessor {
         DefaultFtpProcessor processor = new DefaultFtpProcessor(ftpProperties);
         processor.setFtpClientPool(pool);
         processor.setHasInit(true);
-        this.processor = processor;
+        this.ftpProcessor = processor;
         return processor;
     }
 

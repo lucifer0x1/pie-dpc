@@ -7,7 +7,17 @@ GET http://192.168.56.101:7777/recv?dataCode=code2&dataDirectory=/root/data2
 
 ###
 # mac os docker
-GET http://localhost:64390/recv?dataCode=code1&dataDirectory=/opt
+GET http://localhost:58888/recv?dataCode=code1&dataDirectory=/opt
+
+###
+#    private String clientID;
+#    private String clientIpAddress;
+#    private String recvIpAddress;
+#    private String recvPort;
+###
+# docker : agent install param
+GET http://localhost:58888/install?clientID=wangxiyue-1.agent.id&clientIpAddress=host.docker.internal&recvIpAddress=host.docker.internal&recvPort=2121
+
 
 
 ###
