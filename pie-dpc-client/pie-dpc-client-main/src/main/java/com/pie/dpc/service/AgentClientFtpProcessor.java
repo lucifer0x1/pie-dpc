@@ -6,6 +6,7 @@ import com.pie.common.ftp.FtpProcessor;
 import com.pie.common.ftp.FtpProperties;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool2.ObjectPool;
+import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.util.List;
  **/
 @Component
 @Configuration
+@Order(1)
 public class AgentClientFtpProcessor {
 
     Logger log = LoggerFactory.getLogger(AgentClientFtpProcessor.class);
@@ -53,6 +56,8 @@ public class AgentClientFtpProcessor {
         log.debug("ftp  : user = {} , pwd = {}",ftpProperties.getFtpUserName(),ftpProperties.getFtpUserPassword());
 
         ftpProcessor.setHasInit(false);
+
+        pool.close();
         pool = new GenericObjectPool<>(new FtpClientPooledObjectFactory(ftpProperties), poolConfig);
         preLoadingFtpClient(ftpProperties.getInitialSize(), poolConfig.getMaxIdle());
         ftpProcessor.setFtpClientPool(pool);

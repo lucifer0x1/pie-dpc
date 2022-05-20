@@ -47,11 +47,14 @@ public class FileAdepterService implements AfterFileNotify {
         }
 
         boolean isFind = true;
-        if(recordObj.getRegexStr()!=null && recordObj.getRegexStr().length()>0){
+        if(recordObj.getRegexStr()!=null &&
+                recordObj.getRegexStr().length()>0 &&
+                (!recordObj.getRegexStr().equalsIgnoreCase("null") )){
             //
             Pattern pattern = Pattern.compile(recordObj.getRegexStr());
             Matcher matcher = pattern.matcher(file.getName());
             isFind = matcher.find();
+            log.debug("{} matcher is {}",file.getAbsoluteFile(),isFind);
         }
         if(isFind){
             //TODO 发送ftp和消息 ，  根据监听子目录及子目录变化情况创建发送FTP服务端 子目录

@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -67,10 +64,10 @@ public class DefaultFtpProcessor implements FtpProcessor {
     public boolean uploadFile(String path, String fileName, String originFilePathName) {
         boolean flag = false;
         try {
-            InputStream inputStream  = new FileInputStream(new File(originFilePathName));
+            InputStream inputStream  = new FileInputStream(originFilePathName);
             flag=uploadFile( path,  fileName,  inputStream);
         } catch (Exception e) {
-            //log.error("上传文件出错！", (Object) e.getStackTrace());
+            log.error("上传文件出错！", (Object) e.getStackTrace());
             e.printStackTrace();
         }
         return flag;
@@ -89,14 +86,17 @@ public class DefaultFtpProcessor implements FtpProcessor {
         FTPClient ftpClient = getFtpClient();
         try {
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            createDirectory(path, ftpClient);
+//            createDirectory(path, ftpClient);
 //            ftpClient.makeDirectory(path);
-            ftpClient.changeWorkingDirectory(path);
-            ftpClient.storeFile(fileName, inputStream);
-            flag = true;
+//            ftpClient.changeWorkingDirectory(path);
+            if(changeAndCreateDirectory(path,ftpClient)){
+                ftpClient.changeWorkingDirectory(path);
+                flag =ftpClient.storeFile(fileName, inputStream);
+            }
+
+
         } catch (Exception e) {
-            //log.error("上传文件出错！:{}", e);
-            e.printStackTrace();
+            log.error("上传文件出错！:{}", e);
         } finally {
             if(null!=inputStream) inputStream.close();
             releaseFtpClient(ftpClient);
@@ -166,6 +166,65 @@ public class DefaultFtpProcessor implements FtpProcessor {
         return flag;
     }
 
+    private static List check(String remote){
+        LinkedList list = new LinkedList();
+        remote = remote + File.separator;
+        int start = 0;
+        int end1 = 0;
+        int end2 = 0;
+        int end = 0;
+        String subDir;
+        String subChar;
+
+        do {
+            //check start head
+            while (start < remote.length()-1){
+                subChar = remote.substring(start,start+1);
+                if (subChar.equals("/")  || subChar.equals("\\")) {
+                    start = start +1;
+
+                }else {
+                    break;
+                }
+            }
+            subDir = remote.substring(start);
+
+            //check end
+            end1 = subDir.indexOf("/");
+            end2 = subDir.indexOf("\\");
+            if ((end1 >0) && (end2 > 0)) {
+                end = Math.min(end1,end2);
+            }else {
+                end = Math.max(end1,end2);
+            }
+            if(end< 0){
+                break;
+            }
+
+            end  = start + end;
+
+            list.add(remote.substring(start,end));
+            start = end +1 ;
+//            System.out.println("s =" +start + " e =" + end);
+        } while (start < remote.length()+1 && end > 0);
+
+        return list;
+    }
+
+    public boolean changeAndCreateDirectory (String remote, FTPClient ftpClient)  {
+        List<String> remoteDir = check(remote);
+        for (String dir : remoteDir) {
+
+            if(!existFile(dir,ftpClient)){
+                makeDirectory(dir,ftpClient);
+            }
+            if(changeWorkingDirectory(dir,ftpClient)){
+                log.info("change path ok");
+            }
+        }
+        return true;
+    }
+
     /**
      * 创建多层目录，如果ftp服务器已存在该目录，则不创建，如果没有，则创建
      *
@@ -176,7 +235,7 @@ public class DefaultFtpProcessor implements FtpProcessor {
     public boolean createDirectory(String remote, FTPClient ftpClient) throws IOException {
         String directory = remote + "/";
         //如果远程目录不存在，则递归创建远程目录
-        if (!directory.equalsIgnoreCase("/") && !changeWorkingDirectory(directory, ftpClient)) {
+        if (!directory.equalsIgnoreCase("/")) {
             int start = 0;
             int end = 0;
 
@@ -215,9 +274,6 @@ public class DefaultFtpProcessor implements FtpProcessor {
                         break;
                     }
                 }
-
-
-
                 end = directory.indexOf("/", start);
                 log.debug("directory => {} ,start = {} , end = {} " ,directory,start,end);
 //                paths = paths + "/" + subDirectory;
@@ -233,15 +289,21 @@ public class DefaultFtpProcessor implements FtpProcessor {
      * @param ftpClient
      */
     @Override
-    public boolean existFile(String path, FTPClient ftpClient) throws IOException {
+    public boolean existFile(String path, FTPClient ftpClient) {
         boolean flag = false;
 
-        FTPFile[] files = ftpClient.listFiles(path);
-        if (files.length > 0) {
-            flag = true;
+        FTPFile[] files = new FTPFile[0];
+        try {
+            files = ftpClient.listFiles(path);
+        } catch (IOException e) {
+            log.debug("this path [{}]  not on server , exception = {}",path , e.getMessage());
+        } finally {
+            if (files.length > 0) {
+                flag = true;
+            }
+            log.debug("check path {} exits status = [{}]",path,flag);
+            return flag;
         }
-        log.debug("checkPath {} exits status = [{}]",path,flag);
-        return flag;
     }
 
     /**
@@ -349,6 +411,7 @@ public class DefaultFtpProcessor implements FtpProcessor {
         try {
             for (int i = 0; i < ftpProperties.getRetryCount(); i++) {
                 ftpClient = ftpClientPool.borrowObject();
+                ftpClient.enterRemotePassiveMode();
                 ftpClient.enterLocalPassiveMode();//设置为被动模式
                 ftpClient.changeWorkingDirectory("/");
                 break;

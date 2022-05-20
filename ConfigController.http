@@ -1,25 +1,26 @@
 
-###
+### ######         windows virtual box         ###########3
+# windows data record
+GET http://192.168.56.101:7777/recv?dataCode=code3&dataDirectory=/root/data2
 
 ###
-# window virtual box
-GET http://192.168.56.101:7777/recv?dataCode=code2&dataDirectory=/root/data2
+#  install
+GET http://192.168.56.101:7777/install?clientID=wangxiyue-1.agent.id&clientIpAddress=192.168.56.101&recvIpAddress=192.168.56.1&recvPort=2121
 
+
+
+###########################################docker
 ###
-# mac os docker
+# docker : agent recv
 GET http://localhost:58888/recv?dataCode=code1&dataDirectory=/opt
 
-###
-#    private String clientID;
-#    private String clientIpAddress;
-#    private String recvIpAddress;
-#    private String recvPort;
 ###
 # docker : agent install param
 GET http://localhost:58888/install?clientID=wangxiyue-1.agent.id&clientIpAddress=host.docker.internal&recvIpAddress=host.docker.internal&recvPort=2121
 
+###########################################docker
 
-
+#server ########################################
 ###
 # window server install
 GET http://localhost:8888/agent/install?host=127.0.0.1&user=root&password=root&port=2222&path=/opt
@@ -27,3 +28,5 @@ GET http://localhost:8888/agent/install?host=127.0.0.1&user=root&password=root&p
 ###
 # windows server online
 GET http://localhost:8888/agent/online
+
+###########################3

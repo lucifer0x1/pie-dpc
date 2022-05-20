@@ -5,6 +5,8 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.RabbitConnectionFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -58,5 +60,13 @@ public class RabbitMQConfigure {
                 .bind(defaultQueue())
                 .to(defaultExchange())
                 .with(DEFAULT_ROUTE_FILE_ARRIVAL);
+    }
+
+
+
+    CachingConnectionFactory rabbitConnectionFactory(){
+        CachingConnectionFactory factory  = new CachingConnectionFactory();
+
+        return null;
     }
 }

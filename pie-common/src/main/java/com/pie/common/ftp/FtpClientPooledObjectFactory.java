@@ -36,6 +36,8 @@ public class FtpClientPooledObjectFactory implements PooledObjectFactory<FTPClie
             ftpClient.setControlEncoding(ftpProperties.getEncoding());
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
             ftpClient.enterLocalPassiveMode();
+//            ftpClient.setActivePortRange(10000,10500);
+
             return new DefaultPooledObject<>(ftpClient);
         } catch (Exception e) {
             if (ftpClient.isAvailable()) {

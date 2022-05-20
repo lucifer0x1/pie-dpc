@@ -10,6 +10,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,6 +50,7 @@ public class RabbitMQNotifySender implements SendNotifyFunction {
 
     @Autowired
     RabbitTemplate rabbitTemplate;
+
 
 //    public boolean sendNotifyMessage(String exchange,String routeKey,MessageObj notify) {
 //        log.debug("Custom sender exchange = {} , routeKey = {}" ,exchange,routeKey);
