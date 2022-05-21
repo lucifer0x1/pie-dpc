@@ -1,8 +1,10 @@
 package com.pie.dpc.server.web.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.GenericGenerators;
+import org.hibernate.id.UUIDHexGenerator;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -14,25 +16,28 @@ import java.io.Serializable;
  *
  **/
 @Entity
+@Table(name = "agent_config")
+@GenericGenerator(strategy = "uuid",name = "agentInstallClientID")
 public class ServerAgentConfigEntity implements Serializable {
 
     @Id
-    @Column
+    @Column(length = 32)
+    @GeneratedValue(generator ="agentInstallClientID" )
     private String clientId;
 
-    @Column
+    @Column(length = 64)
     private String host;
 
-    @Column
+    @Column(length = 32)
     private String username;
 
-    @Column
+    @Column(length = 64)
     private String password;
 
     @Column
     private Integer port;
 
-    @Column
+    @Column(length =128)
     private String installPath;
 
 
