@@ -1,5 +1,6 @@
 package com.pie.dpc.server.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.pie.common.heartbeat.HeartBeatMessageObj;
 import com.pie.dpc.server.InstallAgentExecutor;
 import com.pie.dpc.server.status.HeartBeatCheck;
@@ -43,10 +44,10 @@ public class AgentController {
     @ApiOperation("查看客户端在线状态")
     @ApiResponse(code = 0, message = "ResultOK 中 Data 对象结构", response = HeartBeatMessageObj.class)
     public ResultOK listOnline(){
-        List<String>  res = new LinkedList<>();
+        List<Object>  res = new LinkedList<>();
         log.debug("from heartbeat find [{}] agent client",HeartBeatCheck.cache.size());
         HeartBeatCheck.cache.forEach((id,msg)->{
-            res.add(msg.toString());
+            res.add(JSON.parse(msg.toString()));
         });
 
         return ResultOK.ok().setReturnCode(res.size()).setData(res);
@@ -83,6 +84,13 @@ public class AgentController {
             }
         }
         return ResultOK.fail();
+    }
+
+    @RequestMapping(value = "/findInstall" ,method = RequestMethod.GET)
+    @ApiOperation("获取客户端安装信息")
+    public ResultOK findInstall(){
+        List<ServerAgentConfigEntity> all = serverAgentConfigDao.findAll();
+        return ResultOK.ok().setData(all).setReturnCode(all.size());
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.GET)

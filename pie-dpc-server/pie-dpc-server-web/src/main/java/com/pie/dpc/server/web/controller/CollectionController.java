@@ -69,7 +69,16 @@ public class CollectionController {
             return ResultOK.ok().setData(result).setReturnCode(result.size());
         }
         return ResultOK.fail().setData(result).setReturnCode(result.size());
+    }
 
+    @RequestMapping(value = "/findAll",method = RequestMethod.GET)
+    @ApiOperation("获取全部采集配置信息")
+    public ResultOK findAll(){
+        List<CollectionDataRecordEntity>  result  = collectionDataRecordDao.findAll();
+        if (result.size()>0){
+            return ResultOK.ok().setData(result).setReturnCode(result.size());
+        }
+        return ResultOK.fail().setData(result).setReturnCode(result.size());
     }
 
 }
