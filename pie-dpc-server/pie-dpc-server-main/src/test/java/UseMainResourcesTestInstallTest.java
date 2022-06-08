@@ -19,7 +19,7 @@ public class UseMainResourcesTestInstallTest {
     @Test
     void install() {
 
-        if (install.getConnect().connect("root","lucy","192.168.56.101",22)) {
+        if (install.getConnect().connect("root","root","127.0.0.1",10022)) {
             System.out.println(install.install("/app"));
         }
 

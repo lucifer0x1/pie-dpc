@@ -98,21 +98,21 @@ public class AgentController {
         if(path==null || path.length() ==0){ return ResultOK.fail().setData("param error [path]"); }
         if(port==null || port.intValue()<1){ return ResultOK.fail().setData("param error [port]"); }
 
+
+        //TODO 保存到数据库
         ServerAgentConfigEntity entity = new ServerAgentConfigEntity();
         entity.setHost(host);
         entity.setPassword(password);
         entity.setUsername(user);
         entity.setPort(port);
         entity.setInstallPath(path);
-        entity = serverAgentConfigDao.save(entity);
-        return ResultOK.ok().setReturnCode(0).setData(entity);
+        try {
+            return  ResultOK.ok().setData(serverAgentConfigDao.save(entity));
+        } catch (Exception e){
+            log.error("save agent config error to db {}",e.getMessage());
+        }
+        return ResultOK.fail().setReturnCode(-1);
     }
 
-    @RequestMapping(value = "/save",method = RequestMethod.GET)
-    @ApiOperation("添加采集配置记录")
-    public ResultOK addRecord(){
-
-        return ResultOK.ok().setReturnCode(0).setData("添加采集记录成功");
-    }
 
 }

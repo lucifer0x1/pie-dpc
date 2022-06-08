@@ -1,8 +1,10 @@
 package com.pie.dpc.server.web.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.GenericGenerators;
+import org.hibernate.id.UUIDHexGenerator;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -14,39 +16,43 @@ import java.io.Serializable;
  *
  **/
 @Entity
+@Table(name = "agent_config")
+@GenericGenerator(strategy = "uuid",name = "agentInstallClientID")
 public class ServerAgentConfigEntity implements Serializable {
 
     /**
      * 客户端ID
      */
     @Id
-    @Column(nullable = false)
+    @Column(length = 32)
+    @GeneratedValue(generator ="agentInstallClientID" )
     private String clientId;
 
     /**
      * 客户端显示别名 - 非必填
      */
-    @Column(nullable = true)
+    @Column(length = 64,nullable = true)
     private String aliasName;
 
     /***
      * 客户端安装host地址
      *
      */
-    @Column(nullable = false)
+    @Column(length = 64,nullable = false)
     private String host;
 
     /**
      * 客户端安装 ssh 登录账号
      *
      */
-    @Column(nullable = false)
+    @Column(length = 32,nullable = false)
     private String username;
+
 
     /**
      * 客户端安装 ssh 登录密码
      */
-    @Column(nullable = false)
+    @Column(length = 64,nullable = false)
     private String password;
 
     /***
@@ -59,9 +65,8 @@ public class ServerAgentConfigEntity implements Serializable {
     /***
      * 客户端安装 ssh 安装路径
      */
-    @Column(nullable = false)
+    @Column(length = 128,nullable = false)
     private String installPath;
-
 
 
     public String getClientId() {

@@ -29,4 +29,14 @@ GET http://localhost:8888/agent/install?host=127.0.0.1&user=root&password=root&p
 # windows server online
 GET http://localhost:8888/agent/online
 
-###########################3
+###
+# server save agent to db
+GET http://localhost:8888/agent/save?host=127.0.0.1&user=root&password=root&port=2222&path=/opt
+
+###
+# server add data record
+GET http://localhost:8888/collection/add?clientID=ff80808180e72e490180e72eda0c0002&dataCode=code4&dataDirectory=/opt1
+
+###
+# server find data record by clientid
+GET http://localhost:8888/collection/find?clientID=ff80808180e72e490180e72eda0c0002
