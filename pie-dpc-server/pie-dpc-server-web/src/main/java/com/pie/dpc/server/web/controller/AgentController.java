@@ -87,13 +87,32 @@ public class AgentController {
 
     @RequestMapping(value = "/save",method = RequestMethod.GET)
     @ApiOperation("保存客户端目标服务器配置信息")
-    public ResultOK saveAgent(String host,
-                              String username,
-                              String password,Integer port,
-                              String installPath){
+    public ResultOK saveAgent(@ApiParam (value = "安装目标服务器登录地址",required = true)String host,
+                              @ApiParam (value = "安装Agent时登录使用的用户",required = true)String user,
+                              @ApiParam (value = "安装Agent时登录使用的密码",required = true)String password ,
+                              @ApiParam (value = "安装目标服务器登录端口",required = true)Integer port ,
+                              @ApiParam (value = "安装Agent软件路径",required =true)String path){
+        if(host==null || host.length() ==0){ return ResultOK.fail().setData("param error [host]"); }
+        if(user==null || user.length() ==0){ return ResultOK.fail().setData("param error [user]"); }
+        if(password==null || password.length() <=0){ return ResultOK.fail().setData("param error [password]"); }
+        if(path==null || path.length() ==0){ return ResultOK.fail().setData("param error [path]"); }
+        if(port==null || port.intValue()<1){ return ResultOK.fail().setData("param error [port]"); }
 
-
-
-        return ResultOK.ok().setReturnCode(0).setData("保存成功");
+        ServerAgentConfigEntity entity = new ServerAgentConfigEntity();
+        entity.setHost(host);
+        entity.setPassword(password);
+        entity.setUsername(user);
+        entity.setPort(port);
+        entity.setInstallPath(path);
+        entity = serverAgentConfigDao.save(entity);
+        return ResultOK.ok().setReturnCode(0).setData(entity);
     }
+
+    @RequestMapping(value = "/save",method = RequestMethod.GET)
+    @ApiOperation("添加采集配置记录")
+    public ResultOK addRecord(){
+
+        return ResultOK.ok().setReturnCode(0).setData("添加采集记录成功");
+    }
+
 }

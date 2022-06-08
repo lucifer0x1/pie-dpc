@@ -16,24 +16,52 @@ import java.io.Serializable;
 @Entity
 public class ServerAgentConfigEntity implements Serializable {
 
+    /**
+     * 客户端ID
+     */
     @Id
-    @Column
+    @Column(nullable = false)
     private String clientId;
 
-    @Column
+    /**
+     * 客户端显示别名 - 非必填
+     */
+    @Column(nullable = true)
+    private String aliasName;
+
+    /***
+     * 客户端安装host地址
+     *
+     */
+    @Column(nullable = false)
     private String host;
 
-    @Column
+    /**
+     * 客户端安装 ssh 登录账号
+     *
+     */
+    @Column(nullable = false)
     private String username;
 
-    @Column
+    /**
+     * 客户端安装 ssh 登录密码
+     */
+    @Column(nullable = false)
     private String password;
 
-    @Column
+    /***
+     * 客户端安装 ssh 登录端口
+     *
+     */
+    @Column(nullable = false)
     private Integer port;
 
-    @Column
+    /***
+     * 客户端安装 ssh 安装路径
+     */
+    @Column(nullable = false)
     private String installPath;
+
 
 
     public String getClientId() {
