@@ -107,3 +107,18 @@ notify:通知消息结构（系统外部DI消息和内部处理通知消息）
 ##文件回传目录约定（path）
 
 ##文件回传后消息通知数据结构（MQ）
+
+
+# 安装启动install
+~~~
+java -jar pie-dpc-client-main-1.0-dev.jar --clientID=wangxiyue.docker.agent,id --clientIpAddress=agent.xybug.com --recvIpAddress=host.docker.internal--recvPort=2121
+~~~
+
+| 属性 | 含义 | 例子 |
+|:---|:---:|:---:|
+|clientID|客户端标识|wangxiyue.docker.agent.id|
+|clientIpAddress|客户端IP地址|agent.xybug.com|
+|recvIpAddress|数据回传IP地址|127.0.0.1|
+|recvPort|数据回传端口|2121|
+
+

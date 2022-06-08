@@ -27,6 +27,19 @@ public class SimpleFileNotifStrategyService  implements FileNotifyStrategy {
         this.after = afterFileNotify;
     }
 
+    private final FileAlterationMonitor monitor = new FileAlterationMonitor();
+
+
+    @Override
+    public void cancel() {
+        try {
+            monitor.stop();
+            log.debug("{} stoped" , this);
+        } catch (Exception e) {
+            log.warn("FileAlterationMonitor stop error {}",e.getMessage());
+        }
+    }
+
     @Override
     public void afterWatch(CollectionDataRecordObj dataRecordObj, File file) {
         // TODO 发送消息
@@ -54,7 +67,7 @@ public class SimpleFileNotifStrategyService  implements FileNotifyStrategy {
                     afterWatch(dataRecord,file);
                 }
             });
-            FileAlterationMonitor monitor = new FileAlterationMonitor(1000,observer);
+            monitor.addObserver(observer);
             try {
                 monitor.start();
                 log.debug("Directory Listener on [{}] ",dataRecord.getDataDirectory());
