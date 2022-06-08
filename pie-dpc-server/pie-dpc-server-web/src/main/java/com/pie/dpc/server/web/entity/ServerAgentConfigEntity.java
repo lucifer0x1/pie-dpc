@@ -68,6 +68,13 @@ public class ServerAgentConfigEntity implements Serializable {
     @Column(length = 128,nullable = false)
     private String installPath;
 
+    public String getAliasName() {
+        return aliasName;
+    }
+
+    public void setAliasName(String aliasName) {
+        this.aliasName = aliasName;
+    }
 
     public String getClientId() {
         return clientId;
