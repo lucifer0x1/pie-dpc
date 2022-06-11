@@ -66,10 +66,10 @@ public class ConfigController {
     @RequestMapping(value = "/rmDataRecord",method = RequestMethod.GET)
     @ApiOperation("删除一条采集目录策略配置")
     public ResultOK removeConfig(CollectionDataRecordObj config){
-//        cacheConfig.addRecord(config);
-//        monitorService.stop();
-//        monitorService.monitor(cacheConfig.getCollectionDataRecordObj());
-//        log.debug("monitor stop and restart");
+        cacheConfig.removeRecord(config);
+        monitorService.stop();
+        monitorService.monitor(cacheConfig.getCollectionDataRecordObj());
+        log.debug("monitor stop and restart");
         return ResultOK.ok().setReturnCode(0).setData(config);
     }
 
