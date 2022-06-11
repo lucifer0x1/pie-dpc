@@ -26,7 +26,7 @@ public class FileDirectoryMonitorService {
     public void  monitor(String ...path){
         FileNotifyStrategy strategy = null;
         if(isWin32orLinux()){
-            strategy = new SimpleFileNotifStrategyService();
+            strategy = new SimpleFileNotifStrategyService(afterFileNotify);
         }else {
             strategy = new LinuxFileNotifyStrategyService(afterFileNotify);
         }
@@ -48,7 +48,7 @@ public class FileDirectoryMonitorService {
     public void monitor(CollectionDataRecordObj... path){
         FileNotifyStrategy strategy = null;
         if(isWin32orLinux()){
-            strategy = new SimpleFileNotifStrategyService();
+            strategy = new SimpleFileNotifStrategyService(afterFileNotify);
         }else {
             strategy = new LinuxFileNotifyStrategyService(afterFileNotify);
         }

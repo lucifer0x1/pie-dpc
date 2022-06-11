@@ -9,7 +9,19 @@ GET http://192.168.56.101:7777/install?clientID=wangxiyue-1.agent.id&clientIpAdd
 
 
 
-###########################################docker
+######### windows agent ##########################################
+
+###
+# install
+GET http://127.0.0.1:7777/install?clientID=wangxiyue-1.win10.id&clientIpAddress=127.0.0.1&recvIpAddress=127.0.0.1&recvPort=2121
+
+
+###
+# add record
+GET http://127.0.0.1:7777/recv?dataCode=code3&dataDirectory=c:/test/input
+
+
+###########################################docker client
 ###
 # docker : agent recv
 GET http://localhost:58888/recv?dataCode=code1&dataDirectory=/opt

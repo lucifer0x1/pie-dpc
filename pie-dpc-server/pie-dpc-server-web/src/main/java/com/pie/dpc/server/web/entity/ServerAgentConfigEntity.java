@@ -20,26 +20,61 @@ import java.io.Serializable;
 @GenericGenerator(strategy = "uuid",name = "agentInstallClientID")
 public class ServerAgentConfigEntity implements Serializable {
 
+    /**
+     * 客户端ID
+     */
     @Id
     @Column(length = 32)
     @GeneratedValue(generator ="agentInstallClientID" )
     private String clientId;
 
-    @Column(length = 64)
+    /**
+     * 客户端显示别名 - 非必填
+     */
+    @Column(length = 64,nullable = true)
+    private String aliasName;
+
+    /***
+     * 客户端安装host地址
+     *
+     */
+    @Column(length = 64,nullable = false)
     private String host;
 
-    @Column(length = 32)
+    /**
+     * 客户端安装 ssh 登录账号
+     *
+     */
+    @Column(length = 32,nullable = false)
     private String username;
 
-    @Column(length = 64)
+
+    /**
+     * 客户端安装 ssh 登录密码
+     */
+    @Column(length = 64,nullable = false)
     private String password;
 
-    @Column
+    /***
+     * 客户端安装 ssh 登录端口
+     *
+     */
+    @Column(nullable = false)
     private Integer port;
 
-    @Column(length =128)
+    /***
+     * 客户端安装 ssh 安装路径
+     */
+    @Column(length = 128,nullable = false)
     private String installPath;
 
+    public String getAliasName() {
+        return aliasName;
+    }
+
+    public void setAliasName(String aliasName) {
+        this.aliasName = aliasName;
+    }
 
     public String getClientId() {
         return clientId;
