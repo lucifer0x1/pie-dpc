@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.Column;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,9 +45,7 @@ public class AgentController {
     public ResultOK listOnline(){
         List<Object>  res = new LinkedList<>();
         log.debug("from heartbeat find [{}] agent client",HeartBeatCheck.cache.size());
-        HeartBeatCheck.cache.forEach((id,msg)->{
-            res.add(JSON.parse(msg.toString()));
-        });
+        HeartBeatCheck.cache.forEach((id,msg)-> res.add(JSON.parse(msg.toString())));
 
         return ResultOK.ok().setReturnCode(res.size()).setData(res);
     }
@@ -62,28 +59,24 @@ public class AgentController {
                                  @ApiParam (value = "安装Agent时登录使用的密码",required = true)String password ,
                                  @ApiParam (value = "安装目标服务器登录端口",required = true)Integer port ,
                                  @ApiParam (value = "安装Agent软件路径",required =true)String path){
-        if(host==null || host.length() ==0){ return ResultOK.fail().setData("param error [host]"); }
-        if(user==null || user.length() ==0){ return ResultOK.fail().setData("param error [user]"); }
-        if(password==null || password.length() <=0){ return ResultOK.fail().setData("param error [password]"); }
         if(path==null || path.length() ==0){ return ResultOK.fail().setData("param error [path]"); }
-        if(port==null || port.intValue()<1){ return ResultOK.fail().setData("param error [port]"); }
 
-
-        //TODO 保存到数据库
-        ServerAgentConfigEntity entity = new ServerAgentConfigEntity();
-        entity.setHost(host);
-        entity.setPassword(password);
-        entity.setUsername(user);
-        entity.setPort(port);
-        entity.setInstallPath(path);
-        serverAgentConfigDao.save(entity);
-
-        if(installAgentExecutor.getConnect().connect(user,password,host,port.intValue())){
+        ResultOK resultOK = canConnected(host, user, password, port);
+        if(resultOK.isReturnSuccess()){
+            //TODO 保存到数据库
+            ServerAgentConfigEntity entity = new ServerAgentConfigEntity();
+            entity.setHost(host);
+            entity.setPassword(password);
+            entity.setUsername(user);
+            entity.setPort(port);
+            entity.setInstallPath(path);
+            ServerAgentConfigEntity agentEntity = serverAgentConfigDao.save(entity);
             if(installAgentExecutor.install(path)){
-                return ResultOK.ok();
+                log.debug("install client[{}] on {} success",agentEntity.getClientId(),path);
+                return ResultOK.fail().setReturnCode(1).setData(agentEntity);
             }
         }
-        return ResultOK.fail();
+        return resultOK;
     }
 
     @RequestMapping(value = "/findInstall" ,method = RequestMethod.GET)
@@ -100,26 +93,53 @@ public class AgentController {
                               @ApiParam (value = "安装Agent时登录使用的密码",required = true)String password ,
                               @ApiParam (value = "安装目标服务器登录端口",required = true)Integer port ,
                               @ApiParam (value = "安装Agent软件路径",required =true)String path){
+
+        ResultOK resultOK = checkParam(host, user, password, port);
+        if(resultOK.isReturnSuccess()){
+            if(path==null || path.length() ==0){ return ResultOK.fail().setData("param error [path]"); }
+            //TODO 保存到数据库
+            ServerAgentConfigEntity entity = new ServerAgentConfigEntity();
+            entity.setHost(host);
+            entity.setPassword(password);
+            entity.setUsername(user);
+            entity.setPort(port);
+            entity.setInstallPath(path);
+            try {
+                return  ResultOK.ok().setData(serverAgentConfigDao.save(entity));
+            } catch (Exception e){
+                log.error("save agent config error to db {}",e.getMessage());
+                return ResultOK.fail().setData("save db error");
+            }
+        } else {
+            return resultOK;
+        }
+    }
+
+
+    @ApiOperation("判断客户端SSH 是否可以连接")
+    @RequestMapping("/canConnected")
+    public ResultOK canConnected(@ApiParam (value = "安装目标服务器登录地址",required = true)String host,
+                                 @ApiParam (value = "安装Agent时登录使用的用户",required = true)String user,
+                                 @ApiParam (value = "安装Agent时登录使用的密码",required = true)String password ,
+                                 @ApiParam (value = "安装目标服务器登录端口",required = true)Integer port){
+        ResultOK resultOK = checkParam(host, user, password, port);
+        if(resultOK.isReturnSuccess()){
+            if(installAgentExecutor.getConnect().connect(user,password,host, port)){
+                return ResultOK.ok().setData("connected success");
+            } else {
+                return ResultOK.fail().setData("can not connected on [" + host + "]");
+            }
+        } else {
+            return  resultOK;
+        }
+    }
+
+    private ResultOK checkParam(String host,String user ,String password,Integer port){
         if(host==null || host.length() ==0){ return ResultOK.fail().setData("param error [host]"); }
         if(user==null || user.length() ==0){ return ResultOK.fail().setData("param error [user]"); }
         if(password==null || password.length() <=0){ return ResultOK.fail().setData("param error [password]"); }
-        if(path==null || path.length() ==0){ return ResultOK.fail().setData("param error [path]"); }
-        if(port==null || port.intValue()<1){ return ResultOK.fail().setData("param error [port]"); }
-
-
-        //TODO 保存到数据库
-        ServerAgentConfigEntity entity = new ServerAgentConfigEntity();
-        entity.setHost(host);
-        entity.setPassword(password);
-        entity.setUsername(user);
-        entity.setPort(port);
-        entity.setInstallPath(path);
-        try {
-            return  ResultOK.ok().setData(serverAgentConfigDao.save(entity));
-        } catch (Exception e){
-            log.error("save agent config error to db {}",e.getMessage());
-        }
-        return ResultOK.fail().setReturnCode(-1);
+        if(port==null || port <1){ return ResultOK.fail().setData("param error [port]"); }
+        return  ResultOK.ok();
     }
 
 
