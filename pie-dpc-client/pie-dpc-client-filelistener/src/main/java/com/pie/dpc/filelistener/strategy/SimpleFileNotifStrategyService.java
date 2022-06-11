@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -27,17 +30,20 @@ public class SimpleFileNotifStrategyService  implements FileNotifyStrategy {
         this.after = afterFileNotify;
     }
 
-    private final FileAlterationMonitor monitor = new FileAlterationMonitor();
-
+    private final List<FileAlterationMonitor> monitor = new ArrayList<FileAlterationMonitor>();
 
     @Override
     public void cancel() {
-        try {
-            monitor.stop();
-            log.debug("{} stoped" , this);
-        } catch (Exception e) {
-            log.warn("FileAlterationMonitor stop error {}",e.getMessage());
-        }
+        monitor.stream().forEach(m-> {
+            try {
+                m.stop();
+                log.debug("{} stoped" , this);
+            } catch (Exception e) {
+                log.warn("FileAlterationMonitor stop error {}",e.getMessage());
+            }
+        });
+        monitor.clear();
+        log.debug("clean all FileAlterationMonitor success");
     }
 
     @Override
@@ -67,17 +73,19 @@ public class SimpleFileNotifStrategyService  implements FileNotifyStrategy {
                     afterWatch(dataRecord,file);
                 }
             });
-            monitor.addObserver(observer);
+
+            FileAlterationMonitor m = new FileAlterationMonitor();
+            m.addObserver(observer);
             try {
-                monitor.start();
+                m.start();
                 log.debug("Directory Listener on [{}] ",dataRecord.getDataDirectory());
             } catch (Exception e) {
                 log.error("FileAlterationMonitor error {}",e.getMessage());
             }
+            monitor.add(m);
         }else {
             log.warn("[{}]  is not exists or not Dir ",dataRecord.getDataDirectory());
         }
-
 
     }
 
@@ -107,7 +115,7 @@ public class SimpleFileNotifStrategyService  implements FileNotifyStrategy {
                     count.incrementAndGet();
                 }
             });
-            FileAlterationMonitor monitor = new FileAlterationMonitor(1000,observer);
+            FileAlterationMonitor monitor = new FileAlterationMonitor(5000,observer);
             try {
                 monitor.start();
                 log.debug("Directory Listener on [{}] ",filePath);

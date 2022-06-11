@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -58,9 +59,32 @@ public class MetaDataController {
         return ResultOK.fail();
     }
 
-    @RequestMapping("/saveMetaData")
+
+    @RequestMapping(value = "/saveHeader" , method = RequestMethod.GET)
+    @ApiOperation("保存 一级目录")
+    public ResultOK saveHeader(@ApiParam(value = "目录标识 dataCode",required = true) String dataCode,
+                               @ApiParam(value = "目录 描述信息")String description) {
+        return saveMenu(null, dataCode, description);
+    }
+
+    @RequestMapping(value = "/saveMenu",method = RequestMethod.GET)
+    @ApiOperation("保存 目录信息")
+    public ResultOK saveMenu(@ApiParam(value = "上级目录dataCode") String parentDataCode,
+                             @ApiParam(value = "目录标识 dataCode",required = true) String dataCode,
+                             @ApiParam(value = "目录 描述信息")String description){
+        return saveMeta(parentDataCode,dataCode,description,false);
+    }
+    @RequestMapping(value = "/saveData",method = RequestMethod.GET)
+    @ApiOperation("保存 产品信息")
+    public ResultOK saveData(@ApiParam(value = "上级目录dataCode") String parentDataCode,
+                             @ApiParam(value = "数据产品标识",required = true) String dataCode,
+                             @ApiParam(value = "数据产品 描述信息")String description){
+        return saveMeta(parentDataCode,dataCode,description,true);
+    }
+
+    @RequestMapping(value = "/saveMeta",method = RequestMethod.GET)
     @ApiOperation("保存元数据信息")
-    public ResultOK saveMetaData(@ApiParam(value = "上级目录dataCode") String parentDataCode,
+    public ResultOK saveMeta(@ApiParam(value = "上级目录dataCode") String parentDataCode,
                              @ApiParam(value = "目录dataCode 或 数据产品标识",required = true) String dataCode,
                              @ApiParam(value = "目录或数据产品 描述信息")String description,
                              @ApiParam(value = "false 表示目录，true 表示数据产品",required = true) Boolean isNode){
