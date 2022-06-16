@@ -1,0 +1,13 @@
+GET http://localhost:80/api/item?id=99
+Accept: application/json
+
+###
+
+
+### ######         windows         ###########
+# 保存目录
+GET http://localhost:8888/meta/saveHeader?dataCode=d&description=测试目录描述
+
+
+###
+GET http://localhost:8888/meta/saveMenu?parentDataCode=a&dataCode=a.aa&description=测试子目录

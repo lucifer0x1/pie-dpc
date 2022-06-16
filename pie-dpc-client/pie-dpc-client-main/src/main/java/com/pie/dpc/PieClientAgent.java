@@ -34,7 +34,7 @@ public class PieClientAgent implements ApplicationRunner {
     @Autowired
     CacheCollectionConfig cache;
 
-    @Autowired
+    @Override
     public void run(ApplicationArguments args) {
         cache.loadFromDisk();
         CollectionMessageObj obj = new CollectionMessageObj();

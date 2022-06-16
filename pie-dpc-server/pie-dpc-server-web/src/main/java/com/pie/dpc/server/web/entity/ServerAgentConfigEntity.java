@@ -1,8 +1,6 @@
 package com.pie.dpc.server.web.entity;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.GenericGenerators;
-import org.hibernate.id.UUIDHexGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;

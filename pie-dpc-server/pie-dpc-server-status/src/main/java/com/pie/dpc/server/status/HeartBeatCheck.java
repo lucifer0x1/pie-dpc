@@ -45,7 +45,7 @@ public class HeartBeatCheck implements ReceiverHeartBeartCheckNotify {
         for (String heartBeat : heartBeatMessageObjToString) {
             HeartBeatMessageObj msg = new HeartBeatMessageObj(heartBeat);
             cache.put(msg.getIpAddress(),msg);
-            System.out.println("在线客户端：=>" + heartBeat);
+            log.debug("online client ==> {}",heartBeat);
         }
     }
 }

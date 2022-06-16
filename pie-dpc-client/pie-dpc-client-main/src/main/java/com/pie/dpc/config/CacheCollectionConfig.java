@@ -72,6 +72,14 @@ public class CacheCollectionConfig {
         saveOnDisk();
     }
 
+    public void removeRecord(CollectionDataRecordObj dataRecordObj) {
+        if (collectionDataRecordCache.containsKey(dataRecordObj.getDataCode())) {
+            collectionDataRecordCache.remove(dataRecordObj.getDataCode());
+        }
+        saveOnDisk();
+    }
+
+
     public CollectionDataRecordObj getRecordByDataCode(String dataCode){
         return collectionDataRecordCache.get(dataCode);
     }

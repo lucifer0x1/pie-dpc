@@ -15,6 +15,8 @@ class LinuxFileNotifyStrategyServiceTest {
             System.out.println(file.getAbsoluteFile());
         }
 
+        File  file =new File("");
+
     }
 
     public static Set<File> getDirectory(File dir){
