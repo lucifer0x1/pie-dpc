@@ -85,6 +85,10 @@ docker run -d --hostname redis-server --name redis-server -p 6379:6379 redis
 
 前端页面交互逻辑接口
 
+###pie-dpc-server-filemanager
+
+处理服务端接收的文件管理，定时清除临时文件策略等
+
 ##公共对象
 
 公共对象和通用功能
