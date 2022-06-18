@@ -25,7 +25,7 @@ public interface MetaDataDao extends JpaRepository<MetaDataEntity,String> {
      * @return
      */
 
-    List<MetaDataEntity> findMetaDataEntitiesByParentDataCodeAndAndIsNodeFalse(String parentDataCode);
+    List<MetaDataEntity> findMetaDataEntitiesByParentDataCodeAndIsNodeFalse(String parentDataCode);
 
 
     /***

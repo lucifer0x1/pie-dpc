@@ -8,6 +8,11 @@ Accept: application/json
 # 保存目录
 GET http://localhost:8888/meta/saveHeader?dataCode=d&description=测试目录描述
 
+########
+### 子目录
+GET http://localhost:8888/meta/saveMenu?parentDataCode=bb.bb&dataCode=bb3.bb3&description=测试子目录
 
+####
+# 数据资料
 ###
-GET http://localhost:8888/meta/saveMenu?parentDataCode=a&dataCode=a.aa&description=测试子目录
+GET http://localhost:8888/meta/saveData?parentDataCode=a.aaaa&dataCode=product4&description=a.aaaa类产品4
