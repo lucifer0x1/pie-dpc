@@ -16,6 +16,7 @@
         <module>pie-dpc-server-receiver</module>
         <module>pie-dpc-server-web</module>
         <module>pie-dpc-server-status</module>
+        <module>pie-dpc-server-filemanager</module>
     </modules>
 
     <properties>
