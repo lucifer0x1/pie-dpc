@@ -72,7 +72,7 @@ public class FileCheckMonitor {
 
         // TODO 测试
         ScheduledFuture<?> scheduledFuture = executorService.scheduleAtFixedRate(new ServerStoreFileCheckLastTimeThread(new File(path), offset, unit)
-                , 1, PIE_DPC_SERVER_CLEANSTEP, TimeUnit.SECONDS);
+                , 1, PIE_DPC_SERVER_CLEANSTEP, TimeUnit.HOURS);
 
         dirStrategyCache.put(path,new FileDirCacheStrategy(scheduledFuture,offset,unit));
     }

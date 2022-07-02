@@ -42,7 +42,7 @@ public class MetaDataController {
     @RequestMapping("/findMenu")
     @ApiOperation("根据 dataCode 获取其他目录")
     public ResultOK findDataByParent(@ApiParam(value = "上级目录dataCode") String dataCode){
-        List<MetaDataEntity> metaDatas = metaDataDao.findMetaDataEntitiesByParentDataCodeAndAndIsNodeFalse(dataCode);
+        List<MetaDataEntity> metaDatas = metaDataDao.findMetaDataEntitiesByParentDataCodeAndIsNodeFalse(dataCode);
         if(metaDatas.size()>0){
             return ResultOK.ok().setReturnCode(metaDatas.size()).setData(metaDatas);
         }
