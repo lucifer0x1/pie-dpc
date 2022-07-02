@@ -11,6 +11,7 @@
         <module>pie-dpc-client</module>
         <module>pie-dpc-server</module>
         <module>pie-common</module>
+        <module>pie-dpc-factory</module>
 
 
     </modules>

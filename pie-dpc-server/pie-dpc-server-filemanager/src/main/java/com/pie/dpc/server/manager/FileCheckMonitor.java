@@ -1,4 +1,4 @@
-package com.pie.dpc.server;
+package com.pie.dpc.server.manager;
 
 
 import org.slf4j.Logger;
@@ -23,11 +23,11 @@ import java.util.concurrent.*;
 public class FileCheckMonitor {
     Logger log = LoggerFactory.getLogger(FileCheckMonitor.class);
 
-    ScheduledExecutorService executorService = null;
-    ConcurrentHashMap<String,FileDirCacheStrategy> dirStrategyCache = new ConcurrentHashMap<>();
+    private ScheduledExecutorService executorService = null;
+    private ConcurrentHashMap<String,FileDirCacheStrategy> dirStrategyCache = new ConcurrentHashMap<>();
     volatile boolean isInit = false;
 
-    @Value("${pie.dpc.server.cleanstep}")
+    @Value("${pie.dpc.server.cleanstep:10}")
     private int PIE_DPC_SERVER_CLEANSTEP = 3;
 
 
@@ -88,51 +88,6 @@ public class FileCheckMonitor {
         thread.setName("user handle once check thread");
         thread.setDaemon(true);
         thread.start();
-    }
-
-    public static void main(String[] args) {
-        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread thread = new Thread(r);
-                thread.setDaemon(true);
-                thread.setName("test");
-                return thread;
-            }
-        });
-        executorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("111");
-                try {
-                    Thread.sleep(800);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        },1,1,TimeUnit.SECONDS);
-
-        ScheduledFuture<?> scheduledFuture = executorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("2222");
-                try {
-                    Thread.sleep(800);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 1, 1, TimeUnit.SECONDS);
-
-
-        try {
-            Thread.sleep(1000 *10);
-            scheduledFuture.cancel(false);
-
-            Thread.sleep(Integer.MAX_VALUE);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 }

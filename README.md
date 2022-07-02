@@ -125,4 +125,7 @@ java -jar pie-dpc-client-main-1.0-dev.jar --clientID=wangxiyue.docker.agent,id -
 |recvIpAddress|数据回传IP地址|127.0.0.1|
 |recvPort|数据回传端口|2121|
 
+# pie-dpc-factory
+解码入库部分，算法工厂，集成解码入库算法，解码算法根据消息执行
+负责对算法调度，算法安装，进行管理，（包括算法调度串接 传递参数。）
 
