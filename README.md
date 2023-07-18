@@ -7,15 +7,27 @@ java runtime
 docker pull azul/zulu-openjdk-alpine
 ~~~
 
+mariadb(mysql)
+~~~
+docker pull mariadb
+~~~
+~~~
+docker run -p 3306:3306 --restart=always -e MYSQL_ROOT_PASSWORD=123456 --name mariadb-server -d mariadb 
+~~~
+
 ###docker rabbitmq
 ~~~
+docker pull rabbitmq
 docker run -d --hostname rabbitmq-server --name rabbitmq-server   -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin -p 15672:15672 -p 5672:5672 rabbitmq
+~~~
+~~~
+docker exec -it rabbitmq-server /bin/bash
 ~~~
 ~~~
 rabbitmq-plugins enable rabbitmq_management
 ~~~
 ~~~
-echo management_agent.disable_metrics_collector = false > management_agent.disable_metrics_collector.conf
+echo management_agent.disable_metrics_collector = false > /etc/rabbitmq/conf.d/management_agent.disable_metrics_collector.conf
 ~~~
 
 ###kafka
@@ -23,6 +35,7 @@ echo management_agent.disable_metrics_collector = false > management_agent.disab
 ###redis
 
 ~~~
+docker pull redis
 docker run -d --hostname redis-server --name redis-server -p 6379:6379 redis
 ~~~
 
@@ -51,7 +64,7 @@ docker run -d --hostname redis-server --name redis-server -p 6379:6379 redis
 
 ###pie-dpc-client-transfer
 
-文件传输模块：讲匹配正则表达式成功的文件回传服务端 
+文件传输模块：将匹配正则表达式成功的文件回传服务端 
 
 <br>
 <hr>
@@ -89,7 +102,7 @@ docker run -d --hostname redis-server --name redis-server -p 6379:6379 redis
 
 处理服务端接收的文件管理，定时清除临时文件策略等
 
-##公共对象
+##公共对象（pie-common）
 
 公共对象和通用功能
 
@@ -101,6 +114,11 @@ ftp:FTP文件客户端传输功能
 heartbeat:客户端心跳功能及心跳内容数据结构
 <hr>
 notify:通知消息结构（系统外部DI消息和内部处理通知消息）
+
+##解码处理（pie-dpc-factory）
+解码入库部分，算法工厂，集成解码入库算法，解码算法根据消息执行
+负责对算法调度，算法安装，进行管理，（包括算法调度串接 传递参数。）
+
 
 #接口
 
@@ -119,13 +137,10 @@ java -jar pie-dpc-client-main-1.0-dev.jar --clientID=wangxiyue.docker.agent,id -
 ~~~
 
 | 属性 | 含义 | 例子 |
-|:---|:---:|:---:|
 |clientID|客户端标识|wangxiyue.docker.agent.id|
 |clientIpAddress|客户端IP地址|agent.xybug.com|
 |recvIpAddress|数据回传IP地址|127.0.0.1|
 |recvPort|数据回传端口|2121|
 
-# pie-dpc-factory
-解码入库部分，算法工厂，集成解码入库算法，解码算法根据消息执行
-负责对算法调度，算法安装，进行管理，（包括算法调度串接 传递参数。）
+
 

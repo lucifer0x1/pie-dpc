@@ -3,26 +3,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>pie-dpc</artifactId>
+        <artifactId>pie-algorithm</artifactId>
         <groupId>com.pie.dpc</groupId>
         <version>1.0-dev</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>pie-dpc-factory</artifactId>
-    <packaging>pom</packaging>
-    <description>
-        解码入库，算法集成部分，（加工流水线）
-    </description>
-    <modules>
-        <module>pie-dpc-factory-main</module>
-        <module>pie-dpc-factory-loader</module>
-    </modules>
-
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <artifactId>simple-algorithm</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.pie.dpc</groupId>
+            <artifactId>pie-common</artifactId>
+        </dependency>
+    </dependencies>
+
 
 
 

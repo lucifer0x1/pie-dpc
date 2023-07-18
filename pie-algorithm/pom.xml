@@ -8,16 +8,12 @@
         <version>1.0-dev</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>pie-dpc-factory</artifactId>
     <packaging>pom</packaging>
-    <description>
-        解码入库，算法集成部分，（加工流水线）
-    </description>
     <modules>
-        <module>pie-dpc-factory-main</module>
-        <module>pie-dpc-factory-loader</module>
+        <module>simple-algorithm</module>
     </modules>
+    <artifactId>pie-algorithm</artifactId>
+    <description>算法工程</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -25,5 +21,19 @@
     </properties>
 
 
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.pie.dpc</groupId>
+                <artifactId>pie-common</artifactId>
+                <version>1.0-dev</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <directory>out</directory>
+    </build>
 
 </project>
